@@ -1,0 +1,40 @@
+//css to be apllied to all pages
+
+html{
+    //setting 1rem = 10px for easy calcuation, rems are more responsive than px
+    font-size: 62.5%;
+}
+body{
+    //font here
+
+
+    font-size: 1.6rem;
+}
+// * is a universal selector, it applies to all elements
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+h1{
+    font-size: $h1;
+}
+li, button, label, input, p, a{
+    font-size: $text;
+}
+h2{
+    font-size: $h2;
+}
+h3{
+    font-size: $h3;
+    font-weight: normal;
+}
+h4,h5{
+    font-size: $h4;
+}
+a{
+    text-decoration: none;
+    font-size: 2rem;
+}
+
+

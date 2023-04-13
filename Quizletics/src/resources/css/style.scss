@@ -1,0 +1,67 @@
+
+// This file generates the style.css file that we will link in
+// the head. Any file that we import here in the form _filename.scss
+// will be compiled into the style.css file. Scss files are helpful
+// because they allow us to use variables, functions, and seperate
+// each page's styling into its own file to keep things organized.
+
+
+// it also allows you to use nested css
+
+// Normal:
+// div .top .image {
+//     width: 100%;
+// }
+
+// Nested:
+// div {
+//     .top {
+//         .image {
+//             width: 100%;
+//         }
+//     }
+// }
+
+
+// It doesent look like much but it will make it cleaner
+// and easier to read than standard CSS. You can still use the
+// normal css syntax if you want to.
+
+// To start using sass, get this vscode extension
+// https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass-compiler
+
+// Then go to the bottom right corner of vscode and click on the "watch sass" button
+// Then start making any changes you want in the scss files and they will be compiled into our style.css file that we will link
+// The style.css.map file is just used to map scss -> css and doesent need to be edited
+// Other than that everything works exactly the same as standard css
+
+
+
+//variables here: colors, gradients, fonts, etc
+$h1: 1.7rem;
+$h2: 4rem;
+$h3: 2.5rem;
+$h4: 2rem;
+$text: 2.5rem;
+
+
+
+// @include flex() wherever you want to use this function
+@mixin flex($justify, $align, $direction){
+    display: flex;
+    justify-content: $justify;
+    align-items: $align;
+    flex-direction: $direction;
+}
+
+
+//import pages here
+@import "global";
+@import "home";
+@import "login";
+@import "register";
+
+
+
+
+//media queries here (if we want to make the site responsive on different devices)
