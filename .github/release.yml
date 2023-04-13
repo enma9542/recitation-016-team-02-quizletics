@@ -18,6 +18,7 @@ changelog:
       labels:
         - Semver-Patch
         - patch
+        - bug
     - title: Other Changes
       labels:
         - "*"
