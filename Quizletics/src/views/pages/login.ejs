@@ -1,0 +1,30 @@
+<%- include ('../partials/header') %>
+<%- include ('../partials/menu') %>
+<%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
+
+<main>
+  <div class="container">
+    <!-- THE REST OF YOUR HTML CODE GOES HERE -->
+
+    <h2>Login</h2>
+
+<form action="/login" method="post">
+ 
+
+  <div class="container">
+    <label><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="username" required>
+
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="password" required>
+    <button type="submit">Login</button>
+  </div>
+  <div class="container" style="background-color:#f1f1f1"> 
+    <span class="psw">Don't have an account? <a href="/register">Register</a></span>
+  </div>
+ 
+</form>
+  </div>
+</main>
+
+<%- include ('../partials/footer') %>
