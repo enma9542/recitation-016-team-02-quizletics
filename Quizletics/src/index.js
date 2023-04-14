@@ -103,6 +103,9 @@ app.post('/login', async (req, res) => {
 // Register
 app.post('/register', async (req, res) => {
   //hash the password using bcrypt library
+  if(req.body.password != req.body.passwordConfirm){
+    res.redirect('/register');
+  }
   const hash = await bcrypt.hash(req.body.password, 10);
 
   // To-DO: Insert username and hashed password into 'users' table
