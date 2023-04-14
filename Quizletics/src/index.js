@@ -64,6 +64,38 @@ app.use(
 
 //API Routes Go Here
 
+app.get('/', (req, res) => {
+    res.redirect('/login');
+});
+
+app.get('/login', (req, res) => {
+    res.render('pages/login');
+});
+
+app.post('/login', async (req, res) => {
+    var username = req.body.username;
+    var loginQuery = `SELECT * FROM users WHERE username = '${username}';`;
+    db.any(loginQuery)
+      .then(async data=>{
+        console.log("login:");
+        console.log(req.body.password);
+        console.log(data[0].password);
+        const match = await bcrypt.compare(req.body.password, data[0].password);
+        console.log(match);
+        if (match){
+            req.session.user = data;
+            req.session.save();
+            res.redirect('/discover');
+        } else {
+          res.render('pages/login', {message: "Incorrect Password."});
+        }
+      })
+      .catch(err => {
+        console.log(`Username = ${err.username}`);
+        res.redirect('/register');
+      });
+});
+
 // Authentication Middleware.
 const auth = (req, res, next) => {
     if (!req.session.user) {
