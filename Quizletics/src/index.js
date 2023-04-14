@@ -96,6 +96,36 @@ app.post('/login', async (req, res) => {
       });
 });
 
+// Register
+app.post('/register', async (req, res) => {
+  //hash the password using bcrypt library
+  const hash = await bcrypt.hash(req.body.password, 10);
+
+  // To-DO: Insert username and hashed password into 'users' table
+  const searchQuery = "SELECT * FROM users where username = $1";
+  const insertQuery = "INSERT INTO users (username, password) VALUES ($1, $2) returning *;"
+  const values = [req.body.username, hash];
+
+  db.any(searchQuery, [req.body.username])
+  .then(data => {
+    if(data && (data.length > 0)){
+      res.redirect('/register');
+    }
+    else{
+      db.any(insertQuery, values)
+      .then(data => {
+        res.redirect('/login'); 
+      });
+    }
+  });
+  
+});
+
+app.get('/register', (req, res) => {
+  res.render("pages/register");
+});
+
+
 // Authentication Middleware.
 const auth = (req, res, next) => {
     if (!req.session.user) {
@@ -105,6 +135,7 @@ const auth = (req, res, next) => {
     next();
 };
   
+
 // Authentication Required
 app.use(auth);
 
