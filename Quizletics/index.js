@@ -40,6 +40,7 @@ db.connect()
 // *****************************************************
 
 app.set('view engine', 'ejs'); // set the view engine to EJS
+
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
 
 // initialize session variables
@@ -89,7 +90,7 @@ app.post('/login', async (req, res) => {
         if (match){
             req.session.user = data;
             req.session.save();
-            res.redirect('/discover');
+            res.redirect('/home');
         } else {
           res.render('pages/login', {message: "Incorrect Password."});
         }
