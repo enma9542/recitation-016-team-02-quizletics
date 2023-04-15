@@ -32,9 +32,8 @@ describe('Server!', () => {
       chai
         .request(server)
         .post('/login')
-        .send({username: 'Hello', passworld: 'World'})
+        .send({username: 'Hello', password: 'World'})
         .end((err, res) => {
-          //expect(res).to.have.status(302);
           expect("Location", '/home')
           done();
         });
@@ -44,9 +43,8 @@ describe('Server!', () => {
       chai
         .request(server)
         .post('/login')
-        .send({username: 'Hello', passworld: 'World'})
+        .send({username: 'Hello', password: 'World'})
         .end((err, res) => {
-          //expect(res).to.have.status(200);
           expect("Location", '/register');
           done();
         });
