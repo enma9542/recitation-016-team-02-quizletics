@@ -10,6 +10,9 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
 
+var msg = '';
+var msgerr = false;
+
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
 // *****************************************************
@@ -83,12 +86,13 @@ app.get('/login', (req, res) => {
 
 app.post('/login', async (req, res) => {
     var username = req.body.username;
+    console.log(username);
     var loginQuery = `SELECT * FROM users WHERE username = '${username}';`;
     db.any(loginQuery)
       .then(async data=>{
         console.log("login:");
         console.log(req.body.password);
-        console.log(data[0].password);
+        console.log(data);
         const match = await bcrypt.compare(req.body.password, data[0].password);
         console.log(match);
         if (match){
@@ -100,7 +104,7 @@ app.post('/login', async (req, res) => {
         }
       })
       .catch(err => {
-        console.log(`Username = ${err.username}`);
+        console.log(`${err}`);
         res.redirect('/register');
       });
 });
@@ -108,22 +112,26 @@ app.post('/login', async (req, res) => {
 // Register
 app.post('/register', async (req, res) => {
   //hash the password using bcrypt library
+  if(req.body.password != req.body.password_confirm){
+    res.render('pages/register', {message: "Passwords do not match", error: true});
+  }
   const hash = await bcrypt.hash(req.body.password, 10);
 
   // To-DO: Insert username and hashed password into 'users' table
   const searchQuery = "SELECT * FROM users where username = $1";
-  const insertQuery = "INSERT INTO users (username, password) VALUES ($1, $2) returning *;"
-  const values = [req.body.username, hash];
+  const insertQuery = "INSERT INTO users (username, password, email) VALUES ($1, $2, $3) returning *;"
+  const values = [req.body.username, hash, req.body.email];
 
   db.any(searchQuery, [req.body.username])
   .then(data => {
     if(data && (data.length > 0)){
-      res.redirect('/register');
+      res.render('pages/register', {message: "Username Already Exists, Please Choose New Username.", error: true});
     }
     else{
       db.any(insertQuery, values)
       .then(data => {
-        res.redirect('/login'); 
+        //console.log(data);
+        res.render('pages/login', {message: "User Added Successfully", error: false});
       });
     }
   });
@@ -131,7 +139,18 @@ app.post('/register', async (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  res.render("pages/register");
+  res.render("pages/register", {
+    message: msg,
+    error: msgerr,
+  });
+  msg = '';
+  msgerr = false;
+});
+
+app.get('/userProfile', (reg, res) =>{
+  var avgScore;
+  var highScore;
+
 });
 
 app.get("/logout", (req, res) => {
