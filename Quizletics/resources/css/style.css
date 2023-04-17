@@ -4,7 +4,7 @@ html {
 
 body {
   font-family: "Poppins", sans-serif;
-  background-color: #050505;
+  background: url(/icons-img/blurry4.svg);
   color: #f5f5f5;
   font-size: 1.6rem;
 }
@@ -48,29 +48,27 @@ header {
 
 nav {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: row;
   min-height: 10vh;
   width: 60%;
-  font-family: "Roboto", sans-serif;
 }
 nav .logo {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   flex-direction: row;
   flex: 1 1 20rem;
   padding: 1rem;
 }
 nav .logo img {
-  width: 4rem;
-  padding-bottom: 0.4rem;
+  width: 3rem;
   padding-left: 1rem;
 }
 nav .logo h1 {
   padding-left: 1rem;
-  font-size: 3.3rem;
+  font-size: 3rem;
 }
 nav ul {
   display: flex;
@@ -91,6 +89,11 @@ nav ul li a:hover {
   border-bottom: 1px solid #f5f5f5;
 }
 
+.logout {
+  align-self: flex-end;
+  color: black;
+}
+
 main {
   min-height: 90vh;
   display: flex;
@@ -100,13 +103,10 @@ main {
 }
 
 .main-card {
-  background: rgb(5, 5, 5);
-  background: linear-gradient(180deg, rgb(5, 5, 5) 0%, rgb(36, 36, 36) 50%, rgb(5, 5, 5) 100%);
-  filter: drop-shadow(0px 4px 64px rgba(0, 0, 0, 0.014));
   box-sizing: border-box;
-  border: 0.5px solid #FFFFFF;
+  border: 0.5px solid #f5f5f5;
   border-radius: 1rem;
-  padding: 5rem 3rem 5rem 3rem;
+  padding: 3rem 3rem 3rem 3rem;
 }
 .main-card form {
   display: flex;
@@ -115,16 +115,22 @@ main {
   flex-direction: column;
   padding: 2rem;
 }
+.main-card form .usr, .main-card form .pass {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-direction: column;
+}
 .main-card form .bottom {
   display: flex;
   justify-content: center;
   align-items: stretch;
   flex-direction: column;
-  padding-top: 3rem;
+  padding-top: 1rem;
   font-size: 1.3rem;
 }
 .main-card form .bottom span {
-  padding-top: 1rem;
+  padding-top: 0 0.5rem 0 0.5rem;
   align-self: center;
 }
 .main-card form .bottom a {
@@ -150,6 +156,11 @@ main {
   border-radius: 0.6rem;
   font-size: 1.3rem;
   padding: 1rem 2rem 1rem 2rem;
+  cursor: pointer;
+  transition: background 0.4s ease-in-out;
+}
+.main-card form button:hover {
+  background: #4fa1db;
 }
 
 label {
@@ -159,7 +170,7 @@ label {
 input {
   border: 0.6px solid #FFFFFF;
   border-radius: 0.6rem;
-  background: #050505;
+  background: #0c0c0c;
   color: #ababab;
   font-size: 1.3rem;
   padding: 1rem 2rem 1rem 2rem;

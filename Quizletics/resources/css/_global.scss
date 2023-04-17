@@ -7,7 +7,8 @@ html{
 body{
     //font here
     font-family: 'Poppins', sans-serif;
-    background-color: $blackBackground;
+    // background-color: $blackBackground;
+    background: url(/icons-img/blurry4.svg);
     color: $whiteText;
     font-size: 1.6rem;
 }
