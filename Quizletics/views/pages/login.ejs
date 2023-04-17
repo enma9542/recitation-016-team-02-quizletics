@@ -3,27 +3,26 @@
 <%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
 
 <main>
-  <div class="container">
-    <!-- THE REST OF YOUR HTML CODE GOES HERE -->
-
-    <h2>Login</h2>
-
-<form action="/login" method="post">
- 
-
-  <div class="container">
-    <label><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="username" required>
-
-    <label><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="password" required>
-    <button type="submit">Login</button>
-  </div>
-  <div class="container" style="background-color:#f1f1f1"> 
-    <span class="psw">Don't have an account? <a href="/register">Register</a></span>
-  </div>
- 
-</form>
+  <img src="../../resources/icons-img/splash.svg" alt="" class="splash">
+  <div class="main-card">
+      <form action="/login" method="post" class="main-form">
+          <div class="top">
+              <h3>Login</h3>
+              <p>Welcome</p>
+          </div>
+          <div class="usr">
+              <label>Username</label><br>
+              <input type="text" placeholder="Enter your Username" name="username" required>
+          </div>
+              <div class="pass">
+              <br><label>Password</label><br>
+              <input type="password" placeholder="Enter your Password" name="password" required>
+          </div>
+          <div class="bottom">
+              <br><button type="submit">Login</button><br>
+              <span>Don't have an account? <a href="/register">Register</a></span>
+          </div>
+      </form>
   </div>
 </main>
 

@@ -6,8 +6,9 @@ html{
 }
 body{
     //font here
-
-
+    font-family: 'Poppins', sans-serif;
+    background-color: $blackBackground;
+    color: $whiteText;
     font-size: 1.6rem;
 }
 // * is a universal selector, it applies to all elements
