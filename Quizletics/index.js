@@ -65,6 +65,10 @@ app.use(
 
 //API Routes Go Here
 
+app.get('/', (req, res) => {
+  res.render('pages/home')
+});
+
 //Test API
 app.get('/welcome', (req, res) => {
   res.json({status: 'success', message: 'Welcome!'});
