@@ -108,9 +108,7 @@ app.post('/login', async (req, res) => {
 app.post('/register', async (req, res) => {
   //hash the password using bcrypt library
   if(req.body.password != req.body.password_confirm){
-    msg = "Passwords do not match."
-    msgerr = true;
-    res.redirect('/register');
+    res.render('pages/register', {message: "Passwords do not match", error: true});
   }
   
   const hash = await bcrypt.hash(req.body.password, 10);
@@ -123,15 +121,13 @@ app.post('/register', async (req, res) => {
   db.any(searchQuery, [req.body.username])
   .then(data => {
     if(data && (data.length > 0)){
-      msg = "Username Already Exists, Please Choose New Username."
-      msgerr = true;
-      res.redirect('/register');
+      res.render('pages/register', {message: "Username Already Exists, Please Choose New Username.", error: true});
     }
     else{
       db.any(insertQuery, values)
       .then(data => {
         //console.log(data);
-        res.redirect('/login'); 
+        res.render('pages/login', {message: "User Added Successfully", error: false});
       });
     }
   });
@@ -147,6 +143,12 @@ app.get('/register', (req, res) => {
   msgerr = false;
 });
 
+app.get('/userProfile', (reg, res) =>{
+  var avgScore;
+  var highScore;
+
+});
+
 
 // Authentication Middleware.
 const auth = (req, res, next) => {
@@ -156,6 +158,7 @@ const auth = (req, res, next) => {
     }
     next();
 };
+
   
 
 // Authentication Required
