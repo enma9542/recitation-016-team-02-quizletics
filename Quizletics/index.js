@@ -130,6 +130,10 @@ app.get('/register', (req, res) => {
   res.render("pages/register");
 });
 
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.render("pages/login", {message: 'Logged Out Successfully.'});
+});
 
 // Authentication Middleware.
 const auth = (req, res, next) => {
