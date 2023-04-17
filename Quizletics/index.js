@@ -10,11 +10,10 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
 
-app.use(express.static("resources")); // To serve static files such as images, CSS files, and JavaScript files.
+app.use(express.static("resources")); // lets us access the resources folder from the browser
 var msg = '';
 var msgerr = false;
 
-app.use(express.static("resources")); // To serve static files such as images, CSS files, and JavaScript files.
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
 // *****************************************************
