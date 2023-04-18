@@ -151,6 +151,8 @@ app.get('/register', (req, res) => {
 app.get('/userProfile', (reg, res) =>{
   var avgScore;
   var highScore;
+  //INCLUDING THE BELOW FOR TESTING PURPOSES
+  res.render("pages/profile");
 
 });
 

@@ -1,0 +1,28 @@
+<%- include ('../partials/header') %>
+<%- include ('../partials/menu') %>
+<%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
+
+<main>
+  <img src="../../resources/icons-img/splash.svg" alt="" class="splash">
+  <table>
+    <tr>
+        <td>
+            <div class="main-card">
+                <p>Card 1</p>
+            </div>
+        </td>
+        <td>
+            <div class="main-card">
+                <p>Card 2</p>
+            </div>
+        </td>
+        <td>
+            <div class="main-card">
+                <p>Card 3</p>
+            </div>
+        </td>
+    </tr>
+  </table>
+</main>
+
+<%- include ('../partials/footer') %>
