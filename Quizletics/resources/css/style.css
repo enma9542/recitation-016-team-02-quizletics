@@ -162,7 +162,7 @@ main {
   transition: background 0.4s ease-in-out;
 }
 .main-card form button:hover {
-  background: #4fa1db;
+  background: #e2390e;
 }
 
 label {
