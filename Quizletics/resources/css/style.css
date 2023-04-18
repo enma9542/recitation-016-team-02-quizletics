@@ -3,6 +3,9 @@ html {
 }
 
 body {
+  font-family: "Poppins", sans-serif;
+  background: url(/icons-img/blurry4.svg);
+  color: #f5f5f5;
   font-size: 1.6rem;
 }
 
@@ -36,4 +39,147 @@ h4, h5 {
 a {
   text-decoration: none;
   font-size: 2rem;
+}
+
+header {
+  width: 95%;
+  margin: 0 0 auto;
+}
+
+nav {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  min-height: 10vh;
+  width: 60%;
+}
+nav .logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex: 1 1 20rem;
+  padding: 1rem;
+}
+nav .logo img {
+  width: 3rem;
+  padding-left: 1rem;
+}
+nav .logo h1 {
+  padding-left: 1rem;
+  font-size: 3rem;
+}
+nav ul {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  flex: 1 1 40rem;
+  list-style: none;
+}
+nav ul li a {
+  font-weight: 200;
+  font-size: 2rem;
+  color: #f5f5f5;
+  padding: 1rem;
+}
+nav ul li a:hover {
+  color: #f5f5f5;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.logout {
+  align-self: flex-end;
+  color: black;
+}
+
+main {
+  min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.main-card {
+  box-sizing: border-box;
+  border: 0.5px solid #f5f5f5;
+  border-radius: 1rem;
+  padding: 3rem 3rem 3rem 3rem;
+}
+.main-card form {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-direction: column;
+  padding: 2rem;
+}
+.main-card form .usr, .main-card form .pass {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-direction: column;
+}
+.main-card form .bottom {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-direction: column;
+  padding-top: 1rem;
+  font-size: 1.3rem;
+}
+.main-card form .bottom span {
+  padding-top: 0 0.5rem 0 0.5rem;
+  align-self: center;
+}
+.main-card form .bottom a {
+  font-size: 1.3rem;
+  color: #ababab;
+}
+.main-card form .bottom a:hover {
+  color: #f5f5f5;
+  border-bottom: 1px solid #f5f5f5;
+}
+.main-card form h3 {
+  font-size: 3.2rem;
+}
+.main-card form p {
+  visibility: hidden;
+  padding-top: 0rem;
+  font-size: 1.6rem;
+  color: #f5f5f5;
+}
+.main-card form button {
+  background: #f5f5f5;
+  border: none;
+  border-radius: 0.6rem;
+  font-size: 1.3rem;
+  padding: 1rem 2rem 1rem 2rem;
+  cursor: pointer;
+  transition: background 0.4s ease-in-out;
+}
+.main-card form button:hover {
+  background: #4fa1db;
+}
+
+label {
+  font-size: 1.6rem;
+}
+
+input {
+  border: 0.6px solid #FFFFFF;
+  border-radius: 0.6rem;
+  background: #0c0c0c;
+  color: #ababab;
+  font-size: 1.3rem;
+  padding: 1rem 2rem 1rem 2rem;
+}
+
+.splash {
+  position: absolute;
+  bottom: 0;
+  left: 0rem;
+  width: 20%;
+  z-index: -1;
 }/*# sourceMappingURL=style.css.map */
