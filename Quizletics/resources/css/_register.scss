@@ -1,0 +1,6 @@
+.holder{
+    @include flex(center, center, row);
+}
+.space{
+    min-width: 3rem;
+}

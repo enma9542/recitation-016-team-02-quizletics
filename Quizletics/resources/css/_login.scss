@@ -5,12 +5,13 @@ header{
 }
 nav{
     @include flex(flex-start, center, row);
+    flex-wrap: wrap;
     min-height: 10vh;
     width: 60%;
     // font-family: 'Roboto', sans-serif;
     .logo{
         @include flex(center, center, row);
-        flex: 1 1 20rem;
+        flex: 1 1 10rem;
         padding: 1rem;
         img{
             width: 3rem;
@@ -58,6 +59,7 @@ main{
     padding: 3rem 3rem 3rem 3rem;
     form{
         @include flex(center, stretch, column);
+        flex: 1 1 40rem;
         padding: 2rem;
         .usr, .pass{
             @include flex(center, stretch, column);

@@ -51,6 +51,7 @@ nav {
   justify-content: flex-start;
   align-items: center;
   flex-direction: row;
+  flex-wrap: wrap;
   min-height: 10vh;
   width: 60%;
 }
@@ -59,7 +60,7 @@ nav .logo {
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  flex: 1 1 20rem;
+  flex: 1 1 10rem;
   padding: 1rem;
 }
 nav .logo img {
@@ -113,6 +114,7 @@ main {
   justify-content: center;
   align-items: stretch;
   flex-direction: column;
+  flex: 1 1 40rem;
   padding: 2rem;
 }
 .main-card form .usr, .main-card form .pass {
@@ -182,4 +184,15 @@ input {
   left: 0rem;
   width: 20%;
   z-index: -1;
+}
+
+.holder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.space {
+  min-width: 3rem;
 }/*# sourceMappingURL=style.css.map */
