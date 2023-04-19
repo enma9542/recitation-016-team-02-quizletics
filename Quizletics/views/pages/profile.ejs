@@ -4,25 +4,37 @@
 
 <main>
   <img src="../../resources/icons-img/splash.svg" alt="" class="splash">
-  <table>
-    <tr>
-        <td>
-            <div class="main-card">
-                <p>Card 1</p>
-            </div>
-        </td>
-        <td>
-            <div class="main-card">
-                <p>Card 2</p>
-            </div>
-        </td>
-        <td>
-            <div class="main-card">
-                <p>Card 3</p>
-            </div>
-        </td>
-    </tr>
-  </table>
+    <div class="profile-card">
+        <p>Achievements</p>
+    </div>
+    <div class="profile-card">
+        <div class="user-info"> <!-- Profile Image + Name-->
+            <img src="https://placehold.jp/150x150.png" alt="Profile Image">
+            <h3>Username</h3>
+        </div>
+        <div>
+            <p>General Info?</p> <!-- Date Joined?-->
+            <p>Associated Email</p>
+            <p>Date Joined: Date</p>
+            <p>Settings...</p>
+            <p>Change Username?</p> <!-- Same thing as register except it updates the user info instead of creating new thing-->
+            <p>Change Associated Email?</p> <!-- Same thing as register except it updates the user info instead of creating new thing-->
+            <p>Change Password?</p> <!-- Same thing as register except it updates the user info instead of creating new thing; current password must match, include password confirmation-->
+            <p>Change User Image?</p>  <!-- Upload link to an image. -->
+        </div>
+    </div>
+    <div class="profile-card">
+        <p>Stats</p>
+        <p>Quizzes Taken</p>
+        <p>Total Time</p>
+        <p>Fastest Time</p>
+        <p>Average Time</p>
+        <p>Lifetime Points</p>
+        <p>Highest Score</p>
+        <p>Average Score</p>
+        <p>Average Accuracy</p>
+        <p>Highest Accuracy</p>
+    </div>
 </main>
 
 <%- include ('../partials/footer') %>
