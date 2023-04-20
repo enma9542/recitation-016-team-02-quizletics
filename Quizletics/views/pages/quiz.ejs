@@ -2,14 +2,30 @@
 <%- include ('../partials/menu') %>
 <%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
 
-<main>
-    <!-- <h1><%= JSON.stringify(data) %></h1> -->
+<!-- <main>
     <% for (let i = 0; i < data.length; i++) { %>
         <h3><%= data[i].question.text %></h3>
         <p> correct: <%= data[i].correctAnswer %></p>
         <p><%= data[i].incorrectAnswers.join(', ') %></p>
       <% } %>
-</main>
+
+</main> -->
+
+<main>
+    <h3 id="question-text"></h3>
+    <ul id="answer-options">
+      <li><button class="answer-btn"></button></li>
+      <li><button class="answer-btn"></button></li>
+      <li><button class="answer-btn"></button></li>
+      <li><button class="answer-btn"></button></li>
+    </ul>
+    <p id="score">Score: 0</p>
+    <button id="next-btn">Next Question</button>
+  </main>
+  
+  <script src="/js/quiz.js"></script>
+
+  
 
 
 <%- include ('../partials/footer') %>
