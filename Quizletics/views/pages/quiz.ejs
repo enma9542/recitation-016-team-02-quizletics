@@ -1,0 +1,15 @@
+<%- include ('../partials/header') %>
+<%- include ('../partials/menu') %>
+<%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
+
+<main>
+    <!-- <h1><%= JSON.stringify(data) %></h1> -->
+    <% for (let i = 0; i < data.length; i++) { %>
+        <h3><%= data[i].question.text %></h3>
+        <p> correct: <%= data[i].correctAnswer %></p>
+        <p><%= data[i].incorrectAnswers.join(', ') %></p>
+      <% } %>
+</main>
+
+
+<%- include ('../partials/footer') %>
