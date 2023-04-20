@@ -10,7 +10,9 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
 
+
 app.use(express.static("resources")); // lets us access the resources folder from the browser
+const quiz = require('/js/quiz.js');
 var msg = '';
 var msgerr = false;
 
@@ -73,6 +75,7 @@ app.get('/', (req, res) => {
   axios.get('https://the-trivia-api.com/v2/questions?limit=5&categories=history&difficulties=easy')
     .then(response => {
       const data = response.data;
+      quiz(data);
       // console.log(data);
       res.render('pages/quiz', { data: data });
     })

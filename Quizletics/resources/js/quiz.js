@@ -4,8 +4,16 @@
 //   .then(response => {
 //     const questions = response.data;
 //     console.log(questions);
-    const questions = JSON.parse('<%- JSON.stringify(data) %>');
 
+
+    // const questions = JSON.parse('<%- JSON.stringify(data) %>');
+
+
+    module.exports = function(data) {
+        // Use the data variable here
+        console.log(data);
+      }
+    
     let score = 0;
     let currentQuestionIndex = 0;
 
