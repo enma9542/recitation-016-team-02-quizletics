@@ -20,6 +20,7 @@
             margin-left: auto;
             margin-right: auto;
             width: 100%;
+            overflow:hidden;
             border-radius: 50%;
         }
         img:hover{
@@ -48,6 +49,26 @@
         }
         .statbox{
             padding: 1rem;
+        }
+    }
+    .player-awards{
+        table{
+            width:100%;
+            align-content: center;
+            .bordered{
+                border-bottom: 1px solid #fff;
+            }
+        }
+        p{
+            color: white;
+        }
+        .awardbox{
+            padding: 1rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+            text-align: center;
         }
     }
     .card-header{

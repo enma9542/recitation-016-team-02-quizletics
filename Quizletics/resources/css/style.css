@@ -301,6 +301,7 @@ input {
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+  overflow: hidden;
   border-radius: 50%;
 }
 
@@ -334,6 +335,29 @@ input {
 
 .profile-card .player-stats .statbox {
   padding: 1rem;
+}
+
+.profile-card .player-awards table {
+  width: 100%;
+  -ms-flex-line-pack: center;
+      align-content: center;
+}
+
+.profile-card .player-awards table .bordered {
+  border-bottom: 1px solid #fff;
+}
+
+.profile-card .player-awards p {
+  color: white;
+}
+
+.profile-card .player-awards .awardbox {
+  padding: 1rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  text-align: center;
 }
 
 .profile-card .card-header {
