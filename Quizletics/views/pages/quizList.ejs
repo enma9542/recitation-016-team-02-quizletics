@@ -3,21 +3,29 @@
 <%- include ('../partials/category-bar') %>
 <%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
 
-<main>
+<main id="quizList">
   <img src="../../resources/icons-img/splash.svg" alt="" class="splash">
-  <section>
-    <h2>Category 1</h2>
-    <div class="quiz-container">
-      
+  <!-- <div class="quizzes-container">
+    <div class="sports-container">
+      <h1> Sports </h1>
+      <div class="row">
+        <% for (let i = 0; i < 5; i++) { %>
+          <div class="col">
+            <div class="card h-100">
+              <img src="" class="card-img-top" alt="Quiz <%= i%>">
+              <div class="card-body">
+                <h5>Quiz <%= i %></h5>
+              </div>
+              <div class="card-footer">
+                <a href="" class="btn btn-primary">Take Quiz</a>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+      <a href="/quizList/sports"> See More!</a>
     </div>
-  </section>
-
-  <section>
-    <h2>Category 2</h2>
-    <div class="quiz-container">
-    </div>
-  </section>
-
+  </div> -->
 </main>
 
 <%- include ('../partials/footer') %>

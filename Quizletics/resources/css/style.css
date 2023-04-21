@@ -195,4 +195,63 @@ input {
 
 .space {
   min-width: 3rem;
+}
+
+.category-bar {
+  background-color: #333;
+  color: #fff;
+  font-size: 16px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+.category-bar li {
+  position: relative;
+}
+.category-bar li > .sub-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ff0000;
+  padding: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+.category-bar li > .sub-menu a {
+  display: block;
+  margin: 0.5rem 0;
+}
+.category-bar li:hover > .sub-menu {
+  display: block;
+}
+
+.category-bar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.category-bar li {
+  margin-right: 20px;
+}
+
+.category-bar li:last-child {
+  margin-right: 0;
+}
+
+.category-bar a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  display: block;
+  height: 100%;
+}
+
+.category-bar a:hover {
+  background-color: #555;
 }/*# sourceMappingURL=style.css.map */

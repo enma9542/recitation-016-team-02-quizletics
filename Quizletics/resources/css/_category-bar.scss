@@ -1,0 +1,60 @@
+.category-bar {
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    li {
+      position: relative; // Set the position of the parent element to relative so the dropdown can be positioned relative to it.
+      & > .sub-menu {
+        display: none; // Hide the sub-menu by default.
+        position: absolute; // Set the position of the sub-menu to absolute so it can be positioned relative to the parent element.
+        top: 100%; // Position the sub-menu below the parent element.
+        left: 0;
+        background-color: #ff0000;
+        padding: 0.5rem;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 1; // Set the z-index to 1 to ensure that the sub-menu appears above other elements.
+        a {
+          display: block;
+          margin: 0.5rem 0;
+        }
+      }
+      &:hover > .sub-menu {
+        display: block; // Display the sub-menu when the parent element is hovered over.
+      }
+    }
+  }
+  
+  .category-bar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .category-bar li {
+    margin-right: 20px;
+  }
+  
+  .category-bar li:last-child {
+    margin-right: 0;
+  }
+  
+  .category-bar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block;
+    height: 100%;
+  }
+  
+  .category-bar a:hover {
+    background-color: #555;
+  }
+  
+  
