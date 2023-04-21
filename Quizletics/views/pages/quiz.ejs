@@ -1,0 +1,85 @@
+<%- include ('../partials/header') %>
+<%- include ('../partials/menu') %>
+<%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
+
+<main>
+  <section>
+    <h1>Welcome to the Quiz!</h1>
+    <form id="quiz-form">
+      <!-- Display questions here -->
+      <button type="submit" id="submit-quiz">Submit Quiz</button>
+    </form>
+
+    <div id="results" style="display: none;">
+      <h3>Your Quiz Results</h3>
+      <p id="score"></p>
+    </div>
+  </section>
+</main>
+
+<script>
+
+  // Define function to shuffle array
+  function shuffle(array) {
+    let currentIndex = array.length;
+    let temporaryValue, randomIndex;
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
+  }
+
+  function displayQuestions(questions) {
+    const quizForm = document.getElementById('quiz-form');
+    quizForm.innerHTML = ''; // Clear previous questions
+  
+    questions.forEach((question, index) => {
+      const questionElement = document.createElement('div');
+      questionElement.classList.add('question');
+      questionElement.innerHTML = `
+        <h3>${index + 1}. ${question.question}</h3>
+      `;
+  
+      const answers = [...question.incorrect_answers, question.correct_answer];
+      shuffle(answers); // Shuffle the answers
+  
+      const answerList = document.createElement('ul');
+      answers.forEach((answer, answerIndex) => {
+        const answerElement = document.createElement('li');
+        answerElement.innerHTML = `
+          <input type="radio" name="question${index}" value="${answer}" id="q${index}${answerIndex}" required>
+          <label for="q${index}${answerIndex}">${answer}</label>
+        `;
+        answerList.appendChild(answerElement);
+      });
+  
+      questionElement.appendChild(answerList);
+      quizForm.appendChild(questionElement);
+    });
+  }
+  
+
+  // Evaluate submitted answers and display quiz results
+  document.getElementById('submit-quiz').addEventListener('click', () => {
+    const quizForm = document.getElementById('quiz-form');
+    const submittedAnswers = new FormData(quizForm);
+    const correctAnswers = '<%- JSON.stringify(correctAnswers) %>';
+
+    let score = 0;
+
+    for (const [question, answer] of submittedAnswers.entries()) {
+      if (correctAnswers[question] === answer) {
+        score++;
+      }
+    }
+
+    document.getElementById('score').innerText = `Your score: ${score} out of ${Object.keys(correctAnswers).length}`;
+    document.getElementById('results').style.display = 'block';
+  });
+</script>
+
+<%- include ('../partials/footer') %>
