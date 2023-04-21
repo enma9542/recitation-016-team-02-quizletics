@@ -81,7 +81,6 @@ app.get('/login', (req, res) => {
 
 app.post('/login', async (req, res) => {
     var username = req.body.username;
-    console.log(username);
     var loginQuery = `SELECT * FROM users WHERE username = '${username}';`;
     db.any(loginQuery)
       .then(async data=>{
@@ -144,10 +143,95 @@ app.get('/register', (req, res) => {
 });
 
 app.get('/userProfile', (reg, res) =>{
-  var avgScore;
-  var highScore;
+  var valUsername = req.session.username;
+  var quizzesTaken;
+  var pointsEarned;
+  var totTime;
+  var bestTime;
+  var bestScore;
+  var bestAccuracy;
+  var achievement1 = '';
+  var achievement2 = '';
+  var achievement3 = '';
+  var achievement4 = '';
 
+  const qQuizzesTaken = `SELECT COUNT(username) FROM user_to_game WHERE username = '${valUsername}';`;
+  const qPointsEarned = `SELECT SUM(score)  FROM games INNER JOIN user_to_game  ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}';`;
+  const qTotTime = `SELECT SUM(time) FROM games INNER JOIN user_to_game ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}';`;
+  const qBestTime = `SELECT time FROM games INNER JOIN user_to_game ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}' ORDER BY time ASC LIMIT 1;`;
+  const qBestScore = `SELECT score FROM games INNER JOIN user_to_game ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}' ORDER BY score DESC LIMIT 1;`;
+  const qBestAccuracy = `SELECT num_correct FROM games INNER JOIN user_to_game ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}' ORDER BY num_correct DESC LIMIT 1;`;
+
+
+  db.any(qQuizzesTaken)
+    .then( data=>{
+      quizzesTaken = data;
+      if(quizzesTaken >= 10){achievement1 = "10-quizzes-taken";}
+      if(quizzesTaken >= 50){achievement1 = "50-quizzes-taken";}
+      if(quizzesTaken >= 100){achievement1 = "100-quizzes-taken";}
+      if(quizzesTaken >= 500){achievement1 = "500-quizzes-taken";}
+    })
+    .catch(err => {
+      console.log(`${err}`);
+    });
+
+  db.any(qPointsEarned)
+    .then( data=>{
+      pointsEarned = data;
+      if(pointsEarned >= 50){achievement2 = "50-points-earned";}
+      if(pointsEarned >= 100){achievement2 = "100-points-earned";}
+      if(pointsEarned >= 500){achievement2 = "500-points-earned";}
+      if(pointsEarned >= 1000){achievement2 = "1000-points-earned";}
+    })
+    .catch(err => {
+      console.log(`${err}`);
+    });
+
+  db.any(qTotTime)
+    .then( data=>{
+      totTime = data;
+      if(totTime >= 3600){achievement3 = "1-hour-played";}
+      if(totTime >= 18000){achievement3 = "5-hours-played";}
+      if(totTime >= 36000){achievement3 = "10-hours-played";}
+      if(totTime >= 86400){achievement3 = "1-day-played";}
+    })
+    .catch(err => {
+      console.log(`${err}`);
+    });
+
+  db.any(qBestTime)
+    .then( data=>{
+      bestTime = data;
+    })
+    .catch(err => {
+      console.log(`${err}`);
+    });
+
+  db.any(qBestScore)
+    .then( data=>{
+      bestScore = data;
+      if(bestScore >= 10){achievement4 = "10-best-score";}
+      if(bestScore >= 15){achievement4 = "15-best-score";}
+      if(bestScore >= 20){achievement4 = "20-best-score";}
+    })
+    .catch(err => {
+      console.log(`${err}`);
+    });
+
+  db.any(qBestAccuracy)
+    .then( data=>{
+      bestAccuracy = data;
+    })
+    .catch(err => {
+      console.log(`${err}`);
+    });
+
+
+  
+  res.render('pages/profilePage', {quizzesTaken: quizzesTaken, pointsEarned:pointsEarned, totTime: totTime, bestTime: bestTime, bestScore: bestScore, bestAccuracy: bestAccuracy, achievement1: achievement1, achievement2: achievement2, achievement3: achievement3, achievement4: achievement4});
+  
 });
+
 
 
 // Authentication Middleware.
