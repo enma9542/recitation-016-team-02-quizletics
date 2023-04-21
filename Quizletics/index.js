@@ -10,8 +10,6 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
 
-var msg = '';
-var msgerr = false;
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
 // *****************************************************
@@ -86,7 +84,7 @@ app.post('/login', async (req, res) => {
       .then(async data=>{
         console.log("login:");
         console.log(req.body.password);
-        console.log(data);
+        console.log(data[0].password);
         const match = await bcrypt.compare(req.body.password, data[0].password);
         console.log(match);
         if (match){
@@ -98,7 +96,7 @@ app.post('/login', async (req, res) => {
         }
       })
       .catch(err => {
-        console.log(`${err}`);
+        console.log(`Username = ${err.username}`);
         res.redirect('/register');
       });
 });
@@ -106,27 +104,22 @@ app.post('/login', async (req, res) => {
 // Register
 app.post('/register', async (req, res) => {
   //hash the password using bcrypt library
-  if(req.body.password != req.body.password_confirm){
-    res.render('pages/register', {message: "Passwords do not match", error: true});
-  }
-  
   const hash = await bcrypt.hash(req.body.password, 10);
 
   // To-DO: Insert username and hashed password into 'users' table
   const searchQuery = "SELECT * FROM users where username = $1";
-  const insertQuery = "INSERT INTO users (username, password, email) VALUES ($1, $2, $3) returning *;"
-  const values = [req.body.username, hash, req.body.email];
+  const insertQuery = "INSERT INTO users (username, password) VALUES ($1, $2) returning *;"
+  const values = [req.body.username, hash];
 
   db.any(searchQuery, [req.body.username])
   .then(data => {
     if(data && (data.length > 0)){
-      res.render('pages/register', {message: "Username Already Exists, Please Choose New Username.", error: true});
+      res.redirect('/register');
     }
     else{
       db.any(insertQuery, values)
       .then(data => {
-        //console.log(data);
-        res.render('pages/login', {message: "User Added Successfully", error: false});
+        res.redirect('/login'); 
       });
     }
   });
@@ -134,13 +127,18 @@ app.post('/register', async (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  res.render("pages/register", {
-    message: msg,
-    error: msgerr,
-  });
-  msg = '';
-  msgerr = false;
+  res.render("pages/register");
 });
+
+
+// Authentication Middleware.
+const auth = (req, res, next) => {
+    if (!req.session.user) {
+      // Default to login page.
+      return res.redirect('/login');
+    }
+    next();
+};
 
 app.get('/userProfile', (reg, res) =>{
   var valUsername = req.session.username;
@@ -231,19 +229,6 @@ app.get('/userProfile', (reg, res) =>{
   res.render('pages/profilePage', {quizzesTaken: quizzesTaken, pointsEarned:pointsEarned, totTime: totTime, bestTime: bestTime, bestScore: bestScore, bestAccuracy: bestAccuracy, achievement1: achievement1, achievement2: achievement2, achievement3: achievement3, achievement4: achievement4});
   
 });
-
-
-
-// Authentication Middleware.
-const auth = (req, res, next) => {
-    if (!req.session.user) {
-      // Default to login page.
-      return res.redirect('/login');
-    }
-    next();
-};
-
-  
 
 // Authentication Required
 app.use(auth);
