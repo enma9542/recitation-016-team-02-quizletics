@@ -12,7 +12,7 @@ const axios = require('axios'); // To make HTTP requests from our server. We'll 
 
 
 app.use(express.static("resources")); // lets us access the resources folder from the browser
-const quiz = require('/js/quiz.js');
+// const quiz = require('/js/quiz.js');
 var msg = '';
 var msgerr = false;
 
@@ -75,7 +75,7 @@ app.get('/', (req, res) => {
   axios.get('https://the-trivia-api.com/v2/questions?limit=5&categories=history&difficulties=easy')
     .then(response => {
       const data = response.data;
-      quiz(data);
+      // quiz(data);
       // console.log(data);
       res.render('pages/quiz', { data: data });
     })
