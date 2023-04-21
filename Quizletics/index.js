@@ -72,7 +72,7 @@ app.use(
 //API Routes Go Here
 //quiz page
 app.get('/', (req, res) => {
-  axios.get('https://the-trivia-api.com/v2/questions?limit=5&categories=history&difficulties=easy')
+  axios.get('https://the-trivia-api.com/v2/questions?limit=5&categories=&difficulties=easy')
     .then(response => {
       const data = response.data;
       // quiz(data);

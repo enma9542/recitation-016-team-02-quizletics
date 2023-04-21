@@ -2,77 +2,80 @@
 <%- include ('../partials/menu') %>
 <%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
 
-<main>
+<!-- <main>
     <% for (let i = 0; i < data.length; i++) { %>
         <h3><%= data[i].question.text %></h3>
         <ul>
+    
             <li><button class="answer-btn"><%= data[i].correctAnswer %></button></li>
             <li><button class="answer-btn"><%= data[i].incorrectAnswers[0] %></button></li>
             <li><button class="answer-btn"><%= data[i].incorrectAnswers[1] %></button></li>
             <li><button class="answer-btn"><%= data[i].incorrectAnswers[2] %></button></li>
+        </ul>
       <% } %>
-      data
+      <p id="score">Score: 0</p>
+</main> -->
 
+
+<!-- EJS file with a quiz that shows only one question at a time -->
+<!-- EJS file with a quiz that shows only one question at a time -->
+<main>
+  <% let currentQuestionIndex = 0; %>
+  <div id="question-container">
+    <h3><%= data[currentQuestionIndex].question.text %></h3>
+    <ul id="answer-options">
+      <li><button class="answer-btn"><%= data[currentQuestionIndex].correctAnswer %></button></li>
+      <li><button class="answer-btn"><%= data[currentQuestionIndex].incorrectAnswers[0] %></button></li>
+      <li><button class="answer-btn"><%= data[currentQuestionIndex].incorrectAnswers[1] %></button></li>
+      <li><button class="answer-btn"><%= data[currentQuestionIndex].incorrectAnswers[2] %></button></li>
+    </ul>
+  </div>
+  <p id="score">Score: 0</p>
 </main>
 
-<!-- <main>
-  <script>console.log(data);</script>
-    <h3 id="question-text"></h3>
-    <ul id="answer-options">
-      <li><button class="answer-btn"></button></li>
-      <li><button class="answer-btn"></button></li>
-      <li><button class="answer-btn"></button></li>
-      <li><button class="answer-btn"></button></li>
-    </ul>
-    <p id="score">Score: 0</p>
-    <button id="next-btn">Next Question</button>
-  </main>
-
-  <script>
-    // conssole.log(data);
-    let score = 0;
-    let currentQuestionIndex = 0;
-
-    const questionText = document.getElementById('question-text');
-    const answerOptions = document.getElementById('answer-options');
-    const answerButtons = answerOptions.getElementsByClassName('answer-btn');
-    const scoreText = document.getElementById('score');
-    const nextButton = document.getElementById('next-btn');
-
-    function showQuestion() {
-      const currentQuestion = data[currentQuestionIndex];
-      questionText.textContent = currentQuestion.question.text;
-      answerButtons[0].textContent = currentQuestion.correctAnswer;
-      answerButtons[1].textContent = currentQuestion.incorrectAnswers[0];
-      answerButtons[2].textContent = currentQuestion.incorrectAnswers[1];
-      answerButtons[3].textContent = currentQuestion.incorrectAnswers[2];
+<!-- JavaScript code to show only one question at a time -->
+<script>
+  const questionContainer = document.getElementById('question-container');
+  let currentQuestionIndex = 0;
+  const answerButtons = document.querySelectorAll('.answer-btn');
+  const score = document.getElementById('score');
+  let userScore = 0;
+  
+  // Function to render the current question
+  function renderQuestion() {
+    const questionText = document.querySelector('#question-container h3');
+    questionText.textContent = data[currentQuestionIndex].question.text;
+    answerButtons[0].textContent = data[currentQuestionIndex].correctAnswer;
+    answerButtons[1].textContent = data[currentQuestionIndex].incorrectAnswers[0];
+    answerButtons[2].textContent = data[currentQuestionIndex].incorrectAnswers[1];
+    answerButtons[3].textContent = data[currentQuestionIndex].incorrectAnswers[2];
+  }
+  
+  // Function to handle user's answer
+  function handleAnswer(event) {
+    const selectedButton = event.target;
+    const selectedAnswer = selectedButton.textContent;
+    if (selectedAnswer === data[currentQuestionIndex].correctAnswer) {
+      userScore++;
+      score.textContent = `Score: ${userScore}`;
     }
-
-    function checkAnswer(event) {
-      const selectedAnswer = event.target.textContent;
-      const currentQuestion = questions[currentQuestionIndex];
-
-      if (selectedAnswer === currentQuestion.correctAnswer) {
-        score++;
-        scoreText.textContent = `Score: ${score}`;
-      }
-
-      currentQuestionIndex++;
-      if (currentQuestionIndex < questions.length) {
-        showQuestion();
-      } else {
-        // quiz is over
-      }
+    currentQuestionIndex++;
+    if (currentQuestionIndex < data.length) {
+      renderQuestion();
+    } else {
+      questionContainer.innerHTML = `<h2>Quiz completed!</h2><p>Your final score is ${userScore}.</p>`;
     }
+  }
+  
+  // Add event listeners to answer buttons
+  answerButtons.forEach(button => {
+    button.addEventListener('click', handleAnswer);
+  });
+  
+  // Render the first question
+  renderQuestion();
+</script>
 
-    for (let i = 0; i < answerButtons.length; i++) {
-      answerButtons[i].addEventListener('click', checkAnswer);
-    }
-
-    nextButton.addEventListener('click', showQuestion);
-
-    showQuestion(); 
-    </script> -->
   
 
 
