@@ -1,20 +1,18 @@
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS user_to_game CASCADE;
-DROP TABLE IF EXISTS games CASCADE;
 
-CREATE TABLE users(
+CREATE TABLE if NOT EXISTS users(
     username VARCHAR(50) PRIMARY KEY,
     password CHAR(60) NOT NULL,
     email char(60) NOT NULL
 );
 
-CREATE TABLE user_to_game(
+CREATE TABLE if NOT EXISTS user_to_game(
     username VARCHAR(50) PRIMARY KEY,
     game_id SMALLINT NOT NULL
 );
 
-CREATE TABLE games(
+CREATE TABLE IF NOT EXISTS games(
     game_id SERIAL PRIMARY KEY,
     score FLOAT,
-    total_time FLOAT
+    total_time FLOAT,
+    num_correct INT
 );
