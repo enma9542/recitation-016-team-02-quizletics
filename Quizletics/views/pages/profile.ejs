@@ -3,7 +3,7 @@
 <%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
 
 <main>
-  <img src="../../resources/icons-img/splash.svg" alt="" class="splash">
+  <!-- <img src="../../resources/icons-img/splash.svg" alt="" class="splash"> -->
     <div class="profile-card">
         <div class="card-header">
             <h3>Achievements</h3>
@@ -60,13 +60,34 @@
     </div>
     <div class="profile-card">
         <div class="user-info"> <!-- Profile Image + Name-->
-                <!-- Button trigger modal -->
-            <button type="button" data-toggle="modal" data-target="#updatePhotoModal">
+            <button type="button" data-bs-toggle="modal" data-bs-target="#updatePhotoModal">
                 <img src="https://placehold.jp/150x150.png" alt="Profile Image" data-toggle="tooltip" data-placement="top" title="Update Photo" >
             </button>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updatePhotoModal">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePhotoModal">
                 Update Photo
             </button>
+            <div class="modal" id="updatePhotoModal" tabindex="-1" role="dialog" aria-labelledby="updatePhotoModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <p>Please Work</p>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
             <h3>Username</h3>
         </div>
         <div class="account-info">
@@ -93,7 +114,7 @@
                     <div class="statbox">
                         <p>Quizzes Taken</p>
                         <hr>
-                        <h3>999999</h3>
+                        <h3>99999</h3>
                     </div>
                   </div>
                   <div class="col-sm">
@@ -147,22 +168,3 @@
 <%- include ('../partials/footer') %>
 
 <!-- Update User Image -->
-<div class="modal fade" id="updatePhotoModal" tabindex="-1" role="dialog" aria-labelledby="updatePhotoModalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>

@@ -296,6 +296,10 @@ input {
   background-color: transparent;
 }
 
+.profile-card .user-info button:hover {
+  background-color: transparent;
+}
+
 .profile-card .user-info img {
   display: block;
   margin-left: auto;
