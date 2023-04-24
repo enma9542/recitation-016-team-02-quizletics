@@ -76,7 +76,7 @@ var user = {
 //API Routes Go Here
 
 app.get('/', (req, res) => {
-  res.render('pages/home');
+  res.render('pages/home')
 });
 
 //Test API
@@ -244,8 +244,6 @@ app.get('/userProfile', (reg, res) =>{
     .catch(err => {
       console.log(`${err}`);
     });
-
-
   
   res.render('pages/profilePage', {quizzesTaken: quizzesTaken, pointsEarned:pointsEarned, totTime: totTime, bestTime: bestTime, bestScore: bestScore, bestAccuracy: bestAccuracy, achievement1: achievement1, achievement2: achievement2, achievement3: achievement3, achievement4: achievement4});
   
