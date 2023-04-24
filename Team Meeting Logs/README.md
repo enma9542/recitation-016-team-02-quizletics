@@ -31,3 +31,24 @@ Meeting 2: 04/17/23
 - Additional "nice to have" features discussed...
     - Timed quesitons
     - Time affects end score
+
+Meeting 3: 04/24/2023
+- What we've done...
+    - Connected API to site and can now generate quizzes
+    - Created frontend and some API calls relating to home page
+    - Created frontend and some API calls relating to profile page
+    - Created dropdowns for the quiz list
+    - Solved modal issue on profile page
+- Challenges we faced...
+    - Struggling with leaderboard filtering
+    - Struggled with modal issues (just fixed, however)
+    - Some dropdown functionality was causing us problems
+    - Had some issues getting quiz questions to show and work properly
+- To Dos for next week...
+    - Wrap up profile page frontend and modal forms (Taya)
+    - Create and submit powerpoint presentation (Taya)
+    - Connect profile page to users database and source data thru API calls (Madelyn)
+    - Finish up leaderboard and related API calls (Anar)
+    - Finish up dropdown functionlaity on site (Will)
+    - Wrap up quiz page and corresponding functionlaity with the APIs (Enrique and Andrew)
+    - Clean up some frontend design (Andrew)
