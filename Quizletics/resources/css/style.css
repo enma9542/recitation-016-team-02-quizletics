@@ -51,6 +51,7 @@ nav {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
@@ -61,6 +62,12 @@ nav {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+
   min-height: 10vh;
   width: 60%;
 }
@@ -69,6 +76,7 @@ nav .logo {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -82,6 +90,12 @@ nav .logo {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 20rem;
           flex: 1 1 20rem;
+
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex: 1 1 10rem;
+
   padding: 1rem;
 }
 
@@ -161,6 +175,7 @@ main {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -171,6 +186,12 @@ main {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+
+  justify-content: center;
+  align-items: stretch;
+  flex-direction: column;
+  flex: 1 1 40rem;
+
   padding: 2rem;
 }
 
@@ -271,6 +292,7 @@ input {
   width: 20%;
   z-index: -1;
 }
+
 
 .profile-card {
   -webkit-box-sizing: border-box;
@@ -415,3 +437,15 @@ input {
   color: white;
 }
 /*# sourceMappingURL=style.css.map */
+
+.holder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.space {
+  min-width: 3rem;
+}/*# sourceMappingURL=style.css.map */
+
