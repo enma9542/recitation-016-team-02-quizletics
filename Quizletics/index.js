@@ -63,15 +63,25 @@ app.use(
 );
 
 
-// *****************************************************
-// <!-- Section 4 : API Routes -->
-// *****************************************************
-
 //API Routes Go Here
-
+//quiz page
 app.get('/', (req, res) => {
-  res.render('pages/home')
+  axios.get('https://the-trivia-api.com/v2/questions?limit=5&categories=history&difficulties=easy')
+    .then(response => {
+      const data = response.data;
+      console.log('Data received from the API:', data);
+      res.render('pages/quiz', { data: data });
+    })
+    .catch(error => {
+      console.log(error);
+      res.send('An error occurred connecting to trivia api');
+    });
 });
+
+
+// app.get('/', (req, res) => {
+//   res.render('pages/home')
+// });
 
 //Test API
 app.get('/welcome', (req, res) => {
@@ -136,7 +146,7 @@ app.post('/register', async (req, res) => {
       });
     }
   });
-  
+
 });
 
 app.get('/register', (req, res) => {
@@ -158,6 +168,7 @@ app.get("/logout", (req, res) => {
   req.session.destroy();
   res.render("pages/login", {message: 'Logged Out Successfully.'});
 });
+
 
 // Authentication Middleware.
 const auth = (req, res, next) => {
