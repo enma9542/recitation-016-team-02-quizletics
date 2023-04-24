@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS games;
+
 CREATE TABLE if NOT EXISTS users(
     username VARCHAR(50) PRIMARY KEY,
     password CHAR(60) NOT NULL,
@@ -13,7 +15,7 @@ CREATE TABLE if NOT EXISTS user_to_game(
 CREATE TABLE IF NOT EXISTS games(
     game_id SERIAL PRIMARY KEY,
     score FLOAT,
-    time_taken TIME,
+    time_taken SMALLINT,
     num_correct SMALLINT,
     difficulty SMALLINT,
     category VARCHAR(50)

@@ -122,11 +122,20 @@ app.post('/register', async (req, res) => {
     res.render('pages/register', {message: "Passwords do not match", error: true});
   }
   const hash = await bcrypt.hash(req.body.password, 10);
+  
+  const date = new Date();
+
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+
+// This arrangement can be altered based on how we want the date's format to appear.
+let currentDate = `${year}-${month}-${day}`;
 
   // To-DO: Insert username and hashed password into 'users' table
   const searchQuery = "SELECT * FROM users where username = $1";
-  const insertQuery = "INSERT INTO users (username, password) VALUES ($1, $2) returning *;"
-  const values = [req.body.username, hash];
+  const insertQuery = "INSERT INTO users (username, password, email, date_joined) VALUES ($1, $2, $3, $4) returning *;"
+  const values = [req.body.username, hash, req.body.email, currentDate];
 
   db.any(searchQuery, [req.body.username])
   .then(data => {
@@ -176,15 +185,18 @@ app.get('/userProfile', (reg, res) =>{
 
   const qQuizzesTaken = `SELECT COUNT(username) FROM user_to_game WHERE username = '${valUsername}';`;
   const qPointsEarned = `SELECT SUM(score)  FROM games INNER JOIN user_to_game  ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}';`;
-  const qTotTime = `SELECT SUM(time) FROM games INNER JOIN user_to_game ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}';`;
-  const qBestTime = `SELECT time FROM games INNER JOIN user_to_game ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}' ORDER BY time ASC LIMIT 1;`;
+  const qTotTime = `SELECT SUM(time_taken) FROM games INNER JOIN user_to_game ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}';`;
+  const qBestTime = `SELECT time_taken FROM games INNER JOIN user_to_game ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}' ORDER BY time_taken ASC LIMIT 1;`;
   const qBestScore = `SELECT score FROM games INNER JOIN user_to_game ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}' ORDER BY score DESC LIMIT 1;`;
   const qBestAccuracy = `SELECT num_correct FROM games INNER JOIN user_to_game ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}' ORDER BY num_correct DESC LIMIT 1;`;
 
 
   db.any(qQuizzesTaken)
     .then( data=>{
-      quizzesTaken = data;
+      quizzesTaken = data[0].count;
+      console.log(data);
+      console.log('quizzesTaken: %d', quizzesTaken);
+
       if(quizzesTaken >= 10){achievement1 = "10-quizzes-taken";}
       if(quizzesTaken >= 50){achievement1 = "50-quizzes-taken";}
       if(quizzesTaken >= 100){achievement1 = "100-quizzes-taken";}
@@ -196,7 +208,9 @@ app.get('/userProfile', (reg, res) =>{
 
   db.any(qPointsEarned)
     .then( data=>{
-      pointsEarned = data;
+      pointsEarned = data[0].sum;
+      console.log('pointsEarned: %d', pointsEarned);
+
       if(pointsEarned >= 50){achievement2 = "50-points-earned";}
       if(pointsEarned >= 100){achievement2 = "100-points-earned";}
       if(pointsEarned >= 500){achievement2 = "500-points-earned";}
@@ -208,7 +222,9 @@ app.get('/userProfile', (reg, res) =>{
 
   db.any(qTotTime)
     .then( data=>{
-      totTime = data;
+      totTime = data[0].sum;
+      console.log('totTime: %d', totTime);
+
       if(totTime >= 3600){achievement3 = "1-hour-played";}
       if(totTime >= 18000){achievement3 = "5-hours-played";}
       if(totTime >= 36000){achievement3 = "10-hours-played";}
@@ -220,7 +236,10 @@ app.get('/userProfile', (reg, res) =>{
 
   db.any(qBestTime)
     .then( data=>{
-      bestTime = data;
+      bestTime = data[0].time_taken;
+      
+      console.log('bestTime: %d', bestTime);
+
     })
     .catch(err => {
       console.log(`${err}`);
@@ -228,7 +247,9 @@ app.get('/userProfile', (reg, res) =>{
 
   db.any(qBestScore)
     .then( data=>{
-      bestScore = data;
+      bestScore = data[0].score;
+      console.log('bestScore: %d', bestScore);
+
       if(bestScore >= 10){achievement4 = "10-best-score";}
       if(bestScore >= 15){achievement4 = "15-best-score";}
       if(bestScore >= 20){achievement4 = "20-best-score";}
@@ -239,13 +260,26 @@ app.get('/userProfile', (reg, res) =>{
 
   db.any(qBestAccuracy)
     .then( data=>{
-      bestAccuracy = data;
+      bestAccuracy = data[0].num_correct;
+      console.log('bestAccuracy: %d', bestAccuracy);
+
     })
     .catch(err => {
       console.log(`${err}`);
     });
   
-  res.render('pages/profilePage', {quizzesTaken: quizzesTaken, pointsEarned:pointsEarned, totTime: totTime, bestTime: bestTime, bestScore: bestScore, bestAccuracy: bestAccuracy, achievement1: achievement1, achievement2: achievement2, achievement3: achievement3, achievement4: achievement4});
+  res.render('pages/profile', {
+    quizzesTaken: quizzesTaken,
+    pointsEarned:pointsEarned, 
+    totTime: totTime, 
+    bestTime: bestTime, 
+    bestScore: bestScore, 
+    bestAccuracy: bestAccuracy, 
+    achievement1: achievement1, 
+    achievement2: achievement2, 
+    achievement3: achievement3, 
+    achievement4: achievement4
+  });
   
 });
 
