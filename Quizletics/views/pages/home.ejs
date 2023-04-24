@@ -6,27 +6,27 @@
     <div class="container">
         <!-- THE REST OF YOUR HTML CODE GOES HERE -->
         <!--  -->
-        <!-- <div id="leaderboard">
+        <div id="leaderboard">
             <h1>Leaderboard</h1>
             <table>
                 <thead>
-                  <tr>
-                    <th>Rank</th>
-                    <th>Username</th>
-                    <th>Total Points</th>
-                  </tr>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Username</th>
+                        <th>Total Points</th>
+                    </tr>
                 </thead>
                 <tbody>
-                  <% leaderboard.forEach(function(player, index) { %>
-                  <tr>
-                    <td><%= index + 1 %></td>
-                    <td><%= player.username %></td>
-                    <td><%= player.total_points %></td>
-                  </tr>
-                  <% }); %>
+                    <% for(var i = 0; i < leaderboard.length; i++) { %>
+                        <tr>
+                            <td><%= i + 1 %></td>
+                            <td><%= leaderboard[i].username %></td>
+                            <td><%= leaderboard[i].total_points %></td>
+                        </tr>
+                    <% } %>
                 </tbody>
             </table>
-        </div>> -->
+        </div>
 
 
         <div id="featuredQuiz">

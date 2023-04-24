@@ -76,13 +76,12 @@ var user = {
 //API Routes Go Here
 
 app.get('/', (req, res) => {
-  // db.any('SELECT * FROM leaderboard ORDER BY total_points DESC LIMIT 20', [], (err, rows) => {
-  //   if (err) {
-  //     throw err;
-  //   }
-  //   res.render('pages/home', { leaderboard: rows });
-  // });
-  res.render('pages/home');
+  db.any('SELECT username, total_points FROM leaderboard ORDER BY total_points DESC LIMIT 20', (err, rows) => {
+    if (err) {
+      console.error(err.message);
+    }
+    res.render('pages/home', { leaderboard: rows });
+  });
 });
 
 app.get('/home', (req, res) => {
