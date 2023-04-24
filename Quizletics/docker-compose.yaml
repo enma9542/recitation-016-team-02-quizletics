@@ -21,7 +21,7 @@ services:
       - "3000:3000"
     volumes:
       - ./:/home/node/app/
-    command: 'npm start'
+    command: "npm start"
 # This defines our volume(s), which will persist throughout startups.
 # If you want to get rid of a hanging volume, e.g. to test your database init,
 # run `docker-compose rm -v`. Note that this will remove ALL of your data, so
