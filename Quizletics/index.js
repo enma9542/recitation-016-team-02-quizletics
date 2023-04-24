@@ -174,6 +174,7 @@ app.get("/logout", (req, res) => {
   res.render("pages/login", {message: 'Logged Out Successfully.'});
 });
 
+
 // Authentication Middleware.
 const auth = (req, res, next) => {
     if (!req.session.user) {
