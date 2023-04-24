@@ -153,7 +153,20 @@ let currentDate = `${year}-${month}-${day}`;
 });
 
 app.get('/register', (req, res) => {
-  res.render("pages/register");
+res.render("pages/register", {
+    message: msg,
+    error: msgerr,
+  });
+  msg = '';
+  msgerr = false;
+});
+
+app.get('/userProfile', (reg, res) =>{
+  var avgScore;
+  var highScore;
+  //INCLUDING THE BELOW FOR TESTING PURPOSES
+  res.render("pages/profile");
+
 });
 
 app.get("/logout", (req, res) => {
