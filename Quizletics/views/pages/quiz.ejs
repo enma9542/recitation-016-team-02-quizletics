@@ -2,29 +2,135 @@
 <%- include ('../partials/menu') %>
 <%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
 
+<style>
+
+  h3 {
+    color: black;
+    margin-bottom: 20px;
+  }
+
+  .answer {
+    display: inline-block;
+    width: 48%;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .answer-btn {
+    padding: 40px;
+    width: 100%;
+    border: 2px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 24px;
+  }
+
+  .answer-btn:hover {
+    border-color: #999;
+  }
+
+  .answer-msg {
+    display: inline;
+    padding-left: 10px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .answer-msg.correct {
+    color: green;
+  }
+
+  .answer-msg.incorrect {
+    color: red;
+  }
+
+  #quiz-container {
+    background-color: white;
+    padding: 50px;
+    font-size: 28px;
+  }
+
+</style>
+
 <main>
-  <div id="quiz">
-    <p>Total Questions: <%= data.length %></p>
-    <p>Current score: <span id="currentScore">0</span></p>
-    <p>Questions remaining: <span id="questionsRemaining"><%= data.length %></span></p>
-    
-    <div id="questionsContainer">
-      <% let currentQuestionIndex = 0; %>
-      <div class="question" data-question-id="<%= data[currentQuestionIndex].id %>">
-        <h3><%= data[currentQuestionIndex].question.text %></h3>
-        <ul>
-          <% const allAnswers = [data[currentQuestionIndex].correctAnswer, ...data[currentQuestionIndex].incorrectAnswers].sort(() => Math.random() - 0.5); %>
-          <% allAnswers.forEach(answer => { %>
-            <li>
-              <button onclick="answerQuestion('<%= data[currentQuestionIndex].id %>', '<%= answer %>')"><%= answer %></button>
-            </li>
-          <% }); %>
-        </ul>
-      </div>
+  <form id="quiz-form">
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <div id="quiz-container"></div>
     </div>
-  </div>
+  </form>
 </main>
 
-<script src="/js/quiz.js"></script>
 
-<%- include ('../partials/footer') %>
+  <script>
+    const apiData = <%- JSON.stringify(locals.data) %>;
+    let currentQuestionIndex = 0;
+  
+    function displayQuestion(questions, index) {
+      const quizContainer = document.getElementById('quiz-container');
+      quizContainer.innerHTML = '';
+  
+      const questionObj = questions[index];
+      const questionDiv = document.createElement('div');
+      questionDiv.classList.add('question');
+      questionDiv.innerHTML = `
+        <h3>Question ${index + 1}: ${questionObj.question.text}</h3>
+      `;
+  
+      const answers = [questionObj.correctAnswer, ...questionObj.incorrectAnswers].sort(() => Math.random() - 0.5);
+  
+      answers.forEach((answer, answerIndex) => {
+        const answerDiv = document.createElement('div');
+        answerDiv.classList.add('answer');
+        answerDiv.innerHTML = `
+          <button type="button" class="answer-btn" data-question="${index}" data-answer="${answer}">
+            ${answer}
+          </button>
+        `;
+        questionDiv.appendChild(answerDiv);
+      });
+  
+      quizContainer.appendChild(questionDiv);
+    }
+  
+    displayQuestion(apiData, currentQuestionIndex);
+  
+    document.addEventListener('click', (event) => {
+      if (event.target.matches('.answer-btn')) {
+        const button = event.target;
+        const questionIndex = parseInt(button.dataset.question);
+        const answer = button.dataset.answer;
+        const answerDiv = button.parentElement;
+        const answerMsg = document.createElement('span');
+        answerMsg.classList.add('answer-msg');
+
+        if (answer === apiData[questionIndex].correctAnswer) {
+          button.style.borderColor = 'green';
+          answerMsg.innerText = 'Correct!';
+          answerMsg.classList.add('correct');
+          answerDiv.appendChild(answerMsg);
+          if (questionIndex + 1 < apiData.length) {
+            setTimeout(() => {
+              currentQuestionIndex++;
+              displayQuestion(apiData, currentQuestionIndex);
+            }, 2000);
+          } else {
+            setTimeout(() => {
+              alert('Congratulations! You have completed the quiz.');
+            }, 2000);
+          }
+        } else {
+          button.style.borderColor = 'red';
+          button.disabled = true;
+          answerMsg.innerText = 'Incorrect! Please try again.';
+          answerMsg.classList.add('incorrect');
+          answerDiv.appendChild(answerMsg);
+        }
+      }
+    });
+  </script>
+  
+
+
+
+
