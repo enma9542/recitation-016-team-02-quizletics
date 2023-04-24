@@ -159,26 +159,19 @@ app.get("/logout", (req, res) => {
   res.render("pages/login", {message: 'Logged Out Successfully.'});
 });
 
-app.get('/quizList', (req, res) => {
-  res.render('pages/quizList');
-});
 
-app.get('/quizList/sports', (req, res) => {
-  res.render('pages/sports');
-});
-
-// // Authentication Middleware.
-// const auth = (req, res, next) => {
-//     if (!req.session.user) {
-//       // Default to login page.
-//       return res.redirect('/login');
-//     }
-//     next();
-// };
+// Authentication Middleware.
+const auth = (req, res, next) => {
+    if (!req.session.user) {
+      // Default to login page.
+      return res.redirect('/login');
+    }
+    next();
+};
   
 
-// // Authentication Required
-// app.use(auth);
+// Authentication Required
+app.use(auth);
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->

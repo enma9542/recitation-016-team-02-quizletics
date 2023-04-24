@@ -42,11 +42,13 @@ nav{
                 }
             }
             li:hover>a {
-                background-color: #0abf53;
-                color: #ffffff !important;
+                background-color: #ffe0b2;
+                text-decoration: none;
+                color: #333333 !important;
             }
             ul {
                 position: absolute;
+                text-decoration: none;
                 top: 100%;
                 margin: 0;
                 padding: 0;
@@ -55,20 +57,22 @@ nav{
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
                 z-index: 1; // Set the z-index to 1 to ensure that the sub-menu appears above other elements.
                 line-height: normal;
-                background-color: #333;
+                background-color: #f2f2f2;
 
                 li {
                     a {
                         text-align: left;
-                        color: #cccccc;
+                        text-decoration: none;
+                        color: #333333;
                         font-size: 14px;
                         padding: 10px;
                         display: block;
                         white-space: nowrap;
                     }
                     a:hover {
-                        background-color: #0abf53;
-                        color: #ffffff;
+                        text-decoration: none;
+                        background-color: #ffe0b2;
+                        color: #333333;
                     }
                     ul {
                         left: 100%;
