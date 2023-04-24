@@ -13,6 +13,8 @@ CREATE TABLE if NOT EXISTS user_to_game(
 CREATE TABLE IF NOT EXISTS games(
     game_id SERIAL PRIMARY KEY,
     score FLOAT,
-    time FLOAT,
-    num_correct SMALLINT
+    time_taken TIME,
+    num_correct SMALLINT,
+    difficulty SMALLINT,
+    category VARCHAR(50)
 );

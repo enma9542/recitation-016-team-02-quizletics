@@ -58,6 +58,10 @@ app.use(
   })
 );
 
+var user = {
+  username: undefined,
+  password: undefined,
+};
 
 // *****************************************************
 // <!-- Section 4 : API Routes -->
@@ -141,7 +145,7 @@ const auth = (req, res, next) => {
 };
 
 app.get('/userProfile', (reg, res) =>{
-  var valUsername = req.session.username;
+  var valUsername = req.session.user.username;
   var quizzesTaken;
   var pointsEarned;
   var totTime;
@@ -228,6 +232,32 @@ app.get('/userProfile', (reg, res) =>{
   
   res.render('pages/profilePage', {quizzesTaken: quizzesTaken, pointsEarned:pointsEarned, totTime: totTime, bestTime: bestTime, bestScore: bestScore, bestAccuracy: bestAccuracy, achievement1: achievement1, achievement2: achievement2, achievement3: achievement3, achievement4: achievement4});
   
+});
+
+app.post("/submitQuiz", async (req, res) => {
+  var valUsername = req.session.user.username;
+  var valNum_correct = req.body.num_correct;
+  var valTime = req.body.time_taken;
+  var valDiff = req.body.difficulty;
+  var valCategory = req.body.category;
+  var valUsername = req.session.user.username;
+  var valScore = (valNum_correct * 50) - (valTime * 10);
+  var gameVals = [valTime, valDiff, valCategory, valNum_correct, valScore];
+
+  var insertGameQuery = `INSERT INTO games (time_taken, difficulty, category, num_correct, score) VALUES ($1, $2, $3, $4, $5) returning game_id;`;
+  var insertUTGQuery = `INSERT INTO user_to_game (username, game_id) VALUES;`;
+
+  db.any(insertGameQuery, gameVals)
+  .then( data=>{   
+      var utgVals = [valUsername, data];
+      db.any(insertUTGQuery, utgVals)
+      .catch(err => {
+        console.log(`${err}`);
+      });
+  })
+  .catch(err => {
+      console.log(`${err}`);
+  });
 });
 
 // Authentication Required
