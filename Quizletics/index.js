@@ -76,16 +76,24 @@ var user = {
 //API Routes Go Here
 
 app.get('/', (req, res) => {
-  res.render('pages/home')
+  // db.any('SELECT * FROM leaderboard ORDER BY total_points DESC LIMIT 20', [], (err, rows) => {
+  //   if (err) {
+  //     throw err;
+  //   }
+  //   res.render('pages/home', { leaderboard: rows });
+  // });
+  res.render('pages/home');
+});
+
+app.get('/home', (req, res) => {
+  res.redirect('/')
 });
 
 //Test API
 app.get('/welcome', (req, res) => {
   res.json({status: 'success', message: 'Welcome!'});
 });
-app.get('/', (req, res) => {
-    res.redirect('/login');
-});
+
 
 app.get('/login', (req, res) => {
     res.render('pages/login');
