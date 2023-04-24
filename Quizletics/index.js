@@ -10,6 +10,12 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
 
+
+app.use(express.static("resources")); // lets us access the resources folder from the browser
+var msg = '';
+var msgerr = false;
+
+
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
 // *****************************************************
@@ -69,6 +75,10 @@ var user = {
 
 //API Routes Go Here
 
+app.get('/', (req, res) => {
+  res.render('pages/home');
+});
+
 //Test API
 app.get('/welcome', (req, res) => {
   res.json({status: 'success', message: 'Welcome!'});
@@ -108,6 +118,9 @@ app.post('/login', async (req, res) => {
 // Register
 app.post('/register', async (req, res) => {
   //hash the password using bcrypt library
+  if(req.body.password != req.body.password_confirm){
+    res.render('pages/register', {message: "Passwords do not match", error: true});
+  }
   const hash = await bcrypt.hash(req.body.password, 10);
 
   // To-DO: Insert username and hashed password into 'users' table
@@ -134,6 +147,10 @@ app.get('/register', (req, res) => {
   res.render("pages/register");
 });
 
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.render("pages/login", {message: 'Logged Out Successfully.'});
+});
 
 // Authentication Middleware.
 const auth = (req, res, next) => {

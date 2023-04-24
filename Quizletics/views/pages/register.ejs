@@ -3,34 +3,43 @@
 <%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
 
 <main>
-  <div class="container">
-    <!-- THE REST OF YOUR HTML CODE GOES HERE -->
 
-    <h2>Register</h2>
-
-<form action="/register" method="post">
- 
-
-  <div class="container">
-    <label><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="username" required>
-
-    <label><b>Email</b></label>
-    <input type="text" placeholder="Enter Email" name="email" required>
-
-    <label><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="password" required>
-
-    <label><b>Confirm Password</b></label>
-    <input type="password" placeholder="Confirm Password" name="password_confirm" required>
-    <button type="submit">Register</button>
+<div class="main-card">
+  <form action="/register" method="post">
+    <div class="top">
+      <h3>Register</h3>
+      <p>Welcome</p>
   </div>
-  <div class="container" style="background-color:#f1f1f1"> 
-    <span class="psw">Already have an account? <a href="/login">Login</a></span>
+<div class="holder">
+  <div class="usr" class="register">
+      <label>Username</label>
+      <input type="text" placeholder="Enter your Username" name="username" required>
   </div>
- 
-</form>
+  <div class="space">
   </div>
+  <div class="usr" class="register">
+      <label>Email</label>
+      <input type="text" placeholder="Enter your Email" name="email" required>
+  </div>
+</div>
+<div class="holder">
+  <div class="pass" class="register">
+      <br><label>Password</label>
+      <input type="password" placeholder="Enter your Password" name="password" required>
+  </div>
+  <div class="space">
+  </div>
+  <div class="pass" class="register">
+      <br><label>Confirm Password</label>
+      <input type="password" placeholder="Confirm your Password" name="password_confirm" required>
+  </div>
+</div>
+  <div class="bottom">
+      <br><button type="submit">Login</button><br>
+      <span>Already have an account? <a href="/login">Login</a></span>
+  </div>
+  </form>
+</div>
 </main>
 
 <%- include ('../partials/footer') %>
