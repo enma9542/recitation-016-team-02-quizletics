@@ -26,7 +26,11 @@ nav{
         @include flex(space-around, center, row);
         flex: 1 1 40rem;
         list-style: none;
+        margin: 0;
+        padding: 0;
+        width: 100px;
         li{
+            position: relative;
             a{
                 font-weight: 200;
                 font-size: 2rem;
@@ -37,7 +41,50 @@ nav{
                     border-bottom: 1px solid $whiteText;
                 }
             }
+            li:hover>a {
+                background-color: #ffe0b2;
+                text-decoration: none;
+                color: #333333 !important;
+            }
+            ul {
+                position: absolute;
+                text-decoration: none;
+                top: 100%;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                display: none;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                z-index: 1; // Set the z-index to 1 to ensure that the sub-menu appears above other elements.
+                line-height: normal;
+                background-color: #f2f2f2;
+
+                li {
+                    a {
+                        text-align: left;
+                        text-decoration: none;
+                        color: #333333;
+                        font-size: 14px;
+                        padding: 10px;
+                        display: block;
+                        white-space: nowrap;
+                    }
+                    a:hover {
+                        text-decoration: none;
+                        background-color: #ffe0b2;
+                        color: #333333;
+                    }
+                    ul {
+                        left: 100%;
+                        top: 0;
+                    }
+                }
+            }
+
             
+        }
+        li:hover>ul {
+            display: block;
         }
     }
 }
