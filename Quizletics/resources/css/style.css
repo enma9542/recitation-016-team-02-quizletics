@@ -51,7 +51,6 @@ nav {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
@@ -62,12 +61,8 @@ nav {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
-
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: row;
-  flex-wrap: wrap;
-
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   min-height: 10vh;
   width: 60%;
 }
@@ -76,7 +71,6 @@ nav .logo {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -88,14 +82,8 @@ nav .logo {
       -ms-flex-direction: row;
           flex-direction: row;
   -webkit-box-flex: 1;
-      -ms-flex: 1 1 20rem;
-          flex: 1 1 20rem;
-
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  flex: 1 1 10rem;
-
+      -ms-flex: 1 1 10rem;
+          flex: 1 1 10rem;
   padding: 1rem;
 }
 
@@ -175,7 +163,6 @@ main {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -186,12 +173,9 @@ main {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-
-  justify-content: center;
-  align-items: stretch;
-  flex-direction: column;
-  flex: 1 1 40rem;
-
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 40rem;
+          flex: 1 1 40rem;
   padding: 2rem;
 }
 
@@ -293,6 +277,25 @@ input {
   z-index: -1;
 }
 
+.holder {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.space {
+  min-width: 3rem;
+}
 
 .profile-card {
   -webkit-box-sizing: border-box;
@@ -335,6 +338,38 @@ input {
   opacity: 0.5;
 }
 
+.profile-card .user-info .modal {
+  text-align: left;
+}
+
+.profile-card .user-info .modal p {
+  color: black;
+}
+
+.profile-card .user-info .modal button {
+  color: black;
+  margin-right: 0;
+  text-align: right;
+}
+
+.profile-card .user-info .modal input {
+  background-color: transparent;
+}
+
+.profile-card .user-info .modal .submission-buttons {
+  display: inline;
+}
+
+.profile-card .user-info .modal .submission-buttons button {
+  display: inline;
+  background-color: #b1e4e6;
+  text-align: center;
+}
+
+.profile-card .user-info .modal .submission-buttons button:hover {
+  background-color: #88b8ba;
+}
+
 .profile-card .account-info {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -343,6 +378,55 @@ input {
 .profile-card .account-settings {
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+.profile-card .account-settings .button-div {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  text-align: left;
+}
+
+.profile-card .account-settings button {
+  border: none;
+  background-color: white;
+  color: orangered;
+  font-size: 1.4rem;
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.profile-card .account-settings button:hover {
+  background-color: peachpuff;
+}
+
+.profile-card .account-settings .modal {
+  text-align: left;
+}
+
+.profile-card .account-settings .modal p {
+  color: black;
+}
+
+.profile-card .account-settings .modal button {
+  color: black;
+  margin-right: 0;
+  text-align: right;
+}
+
+.profile-card .account-settings .modal .submission-buttons {
+  display: inline;
+}
+
+.profile-card .account-settings .modal .submission-buttons button {
+  display: inline;
+  background-color: #b1e4e6;
+  text-align: center;
+}
+
+.profile-card .account-settings .modal .submission-buttons button:hover {
+  background-color: #88b8ba;
 }
 
 .profile-card .player-stats table {
@@ -437,15 +521,3 @@ input {
   color: white;
 }
 /*# sourceMappingURL=style.css.map */
-
-.holder {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-}
-
-.space {
-  min-width: 3rem;
-}/*# sourceMappingURL=style.css.map */
-
