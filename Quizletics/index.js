@@ -79,6 +79,26 @@ app.get('/', (req, res) => {
   res.render('pages/home')
 });
 
+//API Routes Go Here
+//quiz page
+app.get('/quiz', (req, res) => {
+  category = req.query.category;
+  difficulty = req.query.difficulty;
+  axios.get(`https://the-trivia-api.com/v2/questions?limit=5&categories=${category}&difficulties=${difficulty}`)
+    .then(response => {
+      const data = response.data;
+      res.render('pages/quiz', { data: data, score: req.session.score, req: req });
+      req.session.score = undefined;
+      console.log('Data received from the API:', data);
+      res.render('pages/quiz', { data: data });
+    })
+    .catch(error => {
+      console.log(error);
+      res.send('An error occurred connecting to trivia api');
+    });
+});
+
+
 //Test API
 app.get('/welcome', (req, res) => {
   res.json({status: 'success', message: 'Welcome!'});
@@ -175,14 +195,14 @@ app.get("/logout", (req, res) => {
 });
 
 
-// Authentication Middleware.
-const auth = (req, res, next) => {
-    if (!req.session.user) {
-      // Default to login page.
-      return res.redirect('/login');
-    }
-    next();
-};
+// // Authentication Middleware.
+// const auth = (req, res, next) => {
+//     if (!req.session.user) {
+//       // Default to login page.
+//       return res.redirect('/login');
+//     }
+//     next();
+// };
 
 app.get('/userProfile', (reg, res) =>{
   var valUsername = req.session.user.username;
@@ -323,8 +343,8 @@ app.post("/submitQuiz", async (req, res) => {
   });
 });
 
-// Authentication Required
-app.use(auth);
+// // Authentication Required
+// app.use(auth);
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->
