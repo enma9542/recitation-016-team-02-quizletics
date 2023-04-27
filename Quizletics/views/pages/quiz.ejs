@@ -52,20 +52,35 @@
   }
   
   // Function to handle user's answer
-  function handleAnswer(event) {
-    const selectedButton = event.target;
-    const selectedAnswer = selectedButton.textContent;
-    if (selectedAnswer === data[currentQuestionIndex].correctAnswer) {
-      userScore++;
-      score.textContent = `Score: ${userScore}`;
-    }
-    currentQuestionIndex++;
-    if (currentQuestionIndex < data.length) {
-      renderQuestion();
-    } else {
-      questionContainer.innerHTML = `<h2>Quiz completed!</h2><p>Your final score is ${userScore}.</p>`;
-    }
+  // function handleAnswer(event) {
+  //   const selectedButton = event.target;
+  //   const selectedAnswer = selectedButton.textContent;
+  //   if (selectedAnswer === data[currentQuestionIndex].correctAnswer) {
+  //     userScore++;
+  //     score.textContent = `Score: ${userScore}`;
+  //   }
+  //   currentQuestionIndex++;
+  //   if (currentQuestionIndex < data.length) {
+  //     renderQuestion();
+  //   } else {
+  //     questionContainer.innerHTML = `<h2>Quiz completed!</h2><p>Your final score is ${userScore}.</p>`;
+  //   }
+  // }
+  function handleAnswer() {
+  const selectedButton = event.target;
+  const selectedAnswer = selectedButton.textContent;
+  if (selectedAnswer === data[currentQuestionIndex].correctAnswer) {
+    userScore++;
+    score.textContent = `Score: ${userScore}`;
   }
+  currentQuestionIndex++;
+  if (currentQuestionIndex < data.length) {
+    renderQuestion(data);
+  } else {
+    questionContainer.innerHTML = `<h2>Quiz completed!</h2><p>Your final score is ${userScore}.</p>`;
+  }
+}
+
   
   // Add event listeners to answer buttons
   answerButtons.forEach(button => {
