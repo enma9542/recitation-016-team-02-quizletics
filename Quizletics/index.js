@@ -70,6 +70,29 @@ app.use(
 // *****************************************************
 
 //API Routes Go Here
+//quiz page
+app.get('/quiz', (req, res) => { 
+  const category = req.query.category; // get the category from the query string
+  const difficulty = req.query.difficulty; // get the difficulty from the query string
+
+  axios.get(`https://the-trivia-api.com/v2/questions?limit=15&categories=${category}&difficulties=${difficulty}`) // make a GET request to the trivia API
+    .then(response => {
+      const data = response.data; // get the data from the response
+      res.render('pages/quiz', { data: data, score: req.session.score, req: req });  // render the quiz page and pass the data to it
+      req.session.score = undefined; // reset the score
+      console.log('Data received from the API:', data); // log the data to the console
+      res.render('pages/quiz', { data: data }); // render the quiz page and pass the data to it
+    })
+    .catch(error => { // if an error occurred
+      console.log(error);   // log the error to the console
+      res.send('An error occurred connecting to trivia api');  // send a response to the client
+    });
+});
+
+
+
+
+
 
 app.get('/', (req, res) => {
   res.render('pages/home')
@@ -89,12 +112,13 @@ app.get('/login', (req, res) => {
 
 app.post('/login', async (req, res) => {
     var username = req.body.username;
+    console.log(username);
     var loginQuery = `SELECT * FROM users WHERE username = '${username}';`;
     db.any(loginQuery)
       .then(async data=>{
         console.log("login:");
         console.log(req.body.password);
-        console.log(data[0].password);
+        console.log(data);
         const match = await bcrypt.compare(req.body.password, data[0].password);
         console.log(match);
         if (match){
@@ -106,7 +130,7 @@ app.post('/login', async (req, res) => {
         }
       })
       .catch(err => {
-        console.log(`Username = ${err.username}`);
+        console.log(`${err}`);
         res.redirect('/register');
       });
 });
@@ -118,15 +142,6 @@ app.post('/register', async (req, res) => {
     res.render('pages/register', {message: "Passwords do not match", error: true});
   }
   const hash = await bcrypt.hash(req.body.password, 10);
-  
-  const date = new Date();
-
-  let day = date.getDate();
-  let month = date.getMonth() + 1;
-  let year = date.getFullYear();
-
-// This arrangement can be altered based on how we want the date's format to appear.
-let currentDate = `${year}-${month}-${day}`;
 
   // To-DO: Insert username and hashed password into 'users' table
   const searchQuery = "SELECT * FROM users where username = $1;";
@@ -136,20 +151,21 @@ let currentDate = `${year}-${month}-${day}`;
   db.any(searchQuery, [req.body.username])
   .then(data => {
     if(data && (data.length > 0)){
-      res.redirect('/register');
+      res.render('pages/register', {message: "Username Already Exists, Please Choose New Username.", error: true});
     }
     else{
       db.any(insertQuery, values)
       .then(data => {
-        res.redirect('/login'); 
+        //console.log(data);
+        res.render('pages/login', {message: "User Added Successfully", error: false});
       });
     }
   });
-  
+
 });
 
 app.get('/register', (req, res) => {
-res.render("pages/register", {
+  res.render("pages/register", {
     message: msg,
     error: msgerr,
   });
@@ -161,6 +177,7 @@ app.get("/logout", (req, res) => {
   req.session.destroy();
   res.render("pages/login", {message: 'Logged Out Successfully.'});
 });
+
 
 
 // Authentication Middleware.

@@ -10,16 +10,16 @@
                 <ul class="quiz-category">
                     <li class="category"><a href="#">Sports</a>
                         <ul>
-                            <li><a href="#" onclick="difficultySelected('sports', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('sports', 'medium')">Medium</a></li>
-                            <li><a href="#" onclick="difficultySelected('sports', 'hard')">Hard</a></li>
+                            <li><a href="#" onclick="difficultySelected('Sport', 'easy')">Easy</a></li>
+                            <li><a href="#" onclick="difficultySelected('Sport', 'medium')">Medium</a></li>
+                            <li><a href="#" onclick="difficultySelected('Sport', 'hard')">Hard</a></li>
                         </ul>
                     </li>
                     <li class="category"><a href="#">Art</a>
                         <ul class = "difficulty">
-                            <li><a href="#" onclick="difficultySelected('art', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('art', 'medium')">Medium</a></li>
-                            <li><a href="#" onclick="difficultySelected('art', 'hard')">Hard</a></li>
+                            <li><a href="#" onclick="difficultySelected('Arts', 'easy')">Easy</a></li>
+                            <li><a href="#" onclick="difficultySelected('Arts', 'medium')">Medium</a></li>
+                            <li><a href="#" onclick="difficultySelected('Arts', 'hard')">Hard</a></li>
                         </ul>
                     </li>
                     <li class="category"><a href="#">History</a>
@@ -31,9 +31,9 @@
                     </li>
                     <li class="category"><a href="#">Culture</a>
                         <ul class = "difficulty">
-                            <li><a href="#" onclick="difficultySelected('culture', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('culture', 'medium')">Medium</a></li>
-                            <li><a href="#" onclick="difficultySelected('culture', 'hard')">Hard</a></li>
+                            <li><a href="#" onclick="difficultySelected('Society&Culture', 'easy')">Easy</a></li>
+                            <li><a href="#" onclick="difficultySelected('Society&Culture', 'medium')">Medium</a></li>
+                            <li><a href="#" onclick="difficultySelected('Society&Culture', 'hard')">Hard</a></li>
                         </ul>
                     </li>
                     <li class="category"><a href="#">Science</a>
@@ -45,23 +45,30 @@
                     </li>
                     <li class="category"><a href="#">Geography</a>
                         <ul class = "difficulty">
-                            <li><a href="#" onclick="difficultySelected('geography', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('geography', 'medium')">Medium</a></li>
-                            <li><a href="#" onclick="difficultySelected('geography', 'hard')">Hard</a></li>
+                            <li><a href="#" onclick="difficultySelected('Geography', 'easy')">Easy</a></li>
+                            <li><a href="#" onclick="difficultySelected('Geography', 'medium')">Medium</a></li>
+                            <li><a href="#" onclick="difficultySelected('Geography', 'hard')">Hard</a></li>
                         </ul>
                     </li>
                     <li class="category"><a href="#">Food</a>
                         <ul class = "difficulty">
-                            <li><a href="#" onclick="difficultySelected('food', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('food', 'medium')">Medium</a></li>
-                            <li><a href="#" onclick="difficultySelected('food', 'hard')">Hard</a></li>
+                            <li><a href="#" onclick="difficultySelected('Food&Drink', 'easy')">Easy</a></li>
+                            <li><a href="#" onclick="difficultySelected('Food&Drink', 'medium')">Medium</a></li>
+                            <li><a href="#" onclick="difficultySelected('Food & Drink', 'hard')">Hard</a></li>
                         </ul>
                     </li>
                     <li class="category"><a href="#">General</a>
                         <ul class = "difficulty">
-                            <li><a href="#" onclick="difficultySelected('general', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('general', 'medium')">Medium</a></li>
-                            <li ><a href="#" onclick="difficultySelected('general', 'hard')">Hard</a></li>
+                            <li><a href="#" onclick="difficultySelected('GeneralKnowledge', 'easy')">Easy</a></li>
+                            <li><a href="#" onclick="difficultySelected('GeneralKnowledge', 'medium')">Medium</a></li>
+                            <li ><a href="#" onclick="difficultySelected('GeneralKnowledge', 'hard')">Hard</a></li>
+                        </ul>
+                    </li>
+                    <li class="category"><a href="#">Film</a>
+                        <ul class = "difficulty">
+                            <li><a href="#" onclick="difficultySelected('Film&TV', 'easy')">Easy</a></li>
+                            <li><a href="#" onclick="difficultySelected('Film&TV', 'medium')">Medium</a></li>
+                            <li ><a href="#" onclick="difficultySelected('Film&TV', 'hard')">Hard</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -81,22 +88,6 @@
 
  <script>
 function difficultySelected(category, difficulty) {
-    console.log(category);
-  // Send a request to the API with the selected category and difficulty level
-    // .then(response => {
-    //   if (response.ok) {
-    //     return response.json();
-    //   } else {
-    //     throw new Error('Failed');
-    //   }
-    // })
-    // .then(data => {
-    //   // Handle the response from the API
-    //   console.log(data);
-    // })
-    // .catch(error => {
-    //   // Handle errors
-    //   console.error(error);
-    // });
+    window.location.href = `/quiz?limit=20&category=${category}&difficulty=${difficulty}`;
 }
   </script>
