@@ -320,7 +320,7 @@ app.get('/userProfile', (req, res) =>{
 });
 
 app.post("/submitQuiz", async (req, res) => {
-  var valUsername = req.session.user.username;
+  var valUsername = req.session.user[0].username;
   var valNum_correct = req.body.num_correct;
   var valTime = req.body.time_taken;
   var valDiff = req.body.difficulty;
