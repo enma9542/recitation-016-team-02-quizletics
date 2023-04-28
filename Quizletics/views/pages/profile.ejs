@@ -16,13 +16,13 @@
                     <div class="col-sm">
                       <div class="awardbox">
                         <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p>[Award Name]</p>
+                        <p> <%= achievement1 %></p>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="awardbox">
                         <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p>[Award Name]</p>
+                        <p><%= achievement2 %></p>
                       </div>
                     </div>
                   </div>
@@ -31,13 +31,13 @@
                     <div class="col-sm">
                       <div class="awardbox">
                         <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p>[Award Name]</p>
+                        <p><%= achievement3 %></p>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="awardbox">
                         <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p>[Award Name]</p>
+                        <p><%= achievement4 %></p>
                       </div>
                     </div>
                   </div>
@@ -88,12 +88,12 @@
                 </div>
             </div>
 
-            <h3>Username</h3>
+            <h3><%= username %></h3>
         </div>
         <div class="account-info">
             <h4>Account Information</h4> <!-- Date Joined?-->
-            <p>Date Joined: [Date]</p>
-            <p>Associated Email: [Email]</p>
+            <p>Date Joined: <%= dateJoined %></p>
+            <p>Associated Email: <%= email %></p>
         </div>
         <div class="account-settings">
             <h4>Account Settings</h4>
@@ -114,14 +114,14 @@
                     <div class="statbox">
                         <p>Quizzes Taken</p>
                         <hr>
-                        <h3>99999</h3>
+                        <h3><%= quizzesTaken %></h3>
                     </div>
                   </div>
                   <div class="col-sm">
                     <div class="statbox">
                         <p>Points Earned</p>
                         <hr>
-                        <h3>999999</h3>
+                        <h3><%= pointsEarned %></h3>
                     </div>
                   </div>
                 </div>
@@ -131,14 +131,14 @@
                       <div class="statbox">
                           <p>Total Time Spent</p>
                           <hr>
-                          <h3>999999</h3>
+                          <h3><%= totTime %></h3>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="statbox">
                           <p>Best Time</p>
                           <hr>
-                          <h3>999999</h3>
+                          <h3><%= bestTime %></h3>
                       </div>
                     </div>
                   </div>
@@ -148,14 +148,14 @@
                       <div class="statbox">
                           <p>Best Score</p>
                           <hr>
-                          <h3>999999</h3>
+                          <h3><%= bestScore %></h3>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="statbox">
                           <p>Highest Accuracy</p>
                           <hr>
-                          <h3>999999</h3>
+                          <h3><%= bestAccuracy %></h3>
                       </div>
                     </div>
                   </div>
