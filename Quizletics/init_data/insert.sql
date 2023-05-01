@@ -13,3 +13,4 @@ insert into user_to_game (username, game_id) values ('test', 6);
 insert into user_to_game (username, game_id) values ('test', 7);
 insert into user_to_game (username, game_id) values ('test', 8);
 insert into user_to_game (username, game_id) values ('test', 9);
+
