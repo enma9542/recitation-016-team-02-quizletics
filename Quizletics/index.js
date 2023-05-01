@@ -194,6 +194,7 @@ app.get('/userProfile', (req, res) =>{
   if(!req.session.user){
     res.render("pages/login", {message: 'Must Be Logged In to View Profile Page', error: true});
   }
+
   var user = req.session.user[0];
   var valUsername = req.session.user[0].username;
   var quizzesTaken;
@@ -343,7 +344,7 @@ app.post("/submitQuiz", async (req, res) => {
   var valDiff = req.body.difficulty;
   var valCategory = req.body.category;
   var valUsername = req.session.user.username;
-  var valScore = Math.max((valNum_correct * 100) - (valTime * 5), 0);
+  var valScore = (valNum_correct * 100) - (valTime * 10);
   var gameVals = [valTime, valDiff, valCategory, valNum_correct, valScore];
 
   var insertGameQuery = `INSERT INTO games (time_taken, difficulty, category, num_correct, score) VALUES ($1, $2, $3, $4, $5) returning game_id;`;
@@ -466,7 +467,6 @@ app.post("/updateProfile", async (req, res) => {
 
 // Authentication Required
 app.use(auth);
-
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->

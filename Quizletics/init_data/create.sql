@@ -2,7 +2,9 @@ CREATE TABLE if NOT EXISTS users(
     username VARCHAR(50) PRIMARY KEY,
     password CHAR(60) NOT NULL,
     email char(60) NOT NULL,
-    date_joined DATE
+    date_joined DATE,
+    avatar_picture char(60)
+);
 );
 
 CREATE TABLE if NOT EXISTS user_to_game(
