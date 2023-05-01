@@ -464,8 +464,9 @@ app.post("/updateProfile", async (req, res) => {
 
 });
 
-// // Authentication Required
- app.use(auth);
+// Authentication Required
+app.use(auth);
+
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->
