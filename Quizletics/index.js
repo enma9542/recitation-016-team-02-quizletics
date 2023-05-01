@@ -107,19 +107,6 @@ app.get('/home', (req, res) => {
   res.redirect('/')
 });
 
-// //Test API
-// app.get('/welcome', (req, res) => {
-//   res.json({status: 'success', message: 'Welcome!'});
-// });
-// app.get('/', (req, res) => {
-//     res.redirect('/login');
-// });
-
-// app.get('/login', (req, res) => {
-//     res.render('pages/login');
-// });
-
-
 // LEADERBOARD page. DEV purposes
 app.get('/leaderboard', (req, res) => {
   db.any('SELECT username, total_points FROM leaderboard ORDER BY total_points DESC LIMIT 100')
@@ -130,6 +117,18 @@ app.get('/leaderboard', (req, res) => {
       console.error(error);
       res.render('pages/error');
     });
+});
+
+// //Test API
+// app.get('/welcome', (req, res) => {
+//   res.json({status: 'success', message: 'Welcome!'});
+// });
+// app.get('/', (req, res) => {
+//     res.redirect('/login');
+// });
+
+app.get('/login', (req, res) => {
+    res.render('pages/login');
 });
 
 app.post('/login', async (req, res) => {
