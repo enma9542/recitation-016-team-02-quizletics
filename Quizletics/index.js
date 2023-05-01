@@ -90,12 +90,21 @@ app.get('/quiz', (req, res) => {
 });
 
 
-
-
-
-
+// HOME DEFAULT
 app.get('/', (req, res) => {
-  res.render('pages/home')
+  db.any('SELECT username, total_points FROM leaderboard ORDER BY total_points DESC LIMIT 10')
+    .then(rows => {
+      res.render('pages/home', { leaderboard: rows });
+    })
+    .catch(error => {
+      console.error(error);
+      res.render('pages/error');
+    });
+});
+
+// HOME /HOME
+app.get('/home', (req, res) => {
+  res.redirect('/')
 });
 
 // //Test API
@@ -109,6 +118,19 @@ app.get('/', (req, res) => {
 // app.get('/login', (req, res) => {
 //     res.render('pages/login');
 // });
+
+
+// LEADERBOARD page. DEV purposes
+app.get('/leaderboard', (req, res) => {
+  db.any('SELECT username, total_points FROM leaderboard ORDER BY total_points DESC LIMIT 100')
+    .then(rows => {
+      res.render('pages/leaderboard', { leaderboard: rows });
+    })
+    .catch(error => {
+      console.error(error);
+      res.render('pages/error');
+    });
+});
 
 app.post('/login', async (req, res) => {
     var username = req.body.username;

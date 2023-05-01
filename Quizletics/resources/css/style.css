@@ -41,6 +41,69 @@ a {
   font-size: 2rem;
 }
 
+main {
+  padding-top: 3rem;
+}
+
+.container .leaderboard {
+  box-sizing: border-box;
+  border: 0.5px solid #f5f5f5;
+  border-radius: 1rem;
+  padding: 1rem 3rem 3rem 3rem;
+  width: 100%;
+  display: inline-block;
+  justify-content: center;
+  color: #f5f5f5;
+}
+.container .leaderboard h1 {
+  padding-bottom: 1rem;
+  font-weight: bold;
+}
+.container .leaderboard table {
+  width: 100%;
+  text-align: center;
+}
+.container .leaderboard table tr {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.container .leaderboard table tr:first-child {
+  border-top: none;
+}
+.container .leaderboard table tr:last-child {
+  border-bottom: none;
+}
+.container .leaderboard table tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.container .leaderboard table th, .container .leaderboard table td {
+  padding: 0.5 rem;
+}
+.container .leaderboard table th {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.container .leaderboard table td {
+  font-size: 1.4rem;
+}
+.container .leaderboard table .RColumn {
+  text-align: left;
+}
+.container .leaderboard table .SColumn {
+  text-align: right;
+}
+.container .featuredQuiz {
+  box-sizing: border-box;
+  border: 0.5px solid #f5f5f5;
+  border-radius: 1rem;
+  padding: 1rem 3rem 3rem 3rem;
+  margin-top: 4rem;
+  width: 100%;
+  display: inline-block;
+  justify-content: center;
+  color: #f5f5f5;
+}
+
 header {
   width: 95%;
   margin: 0 0 auto;

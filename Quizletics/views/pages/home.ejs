@@ -4,33 +4,33 @@
 
 <main>
     <div class="container">
-        <!-- THE REST OF YOUR HTML CODE GOES HERE -->
-        <!--  -->
-        <div id="leaderboard">
+        <div class="leaderboard">
             <h1>Leaderboard</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Username</th>
-                        <th>Total Points</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for(var i = 0; i < leaderboard.length; i++) { %>
+            <% if (leaderboard.length > 0) { %>
+                <table>
+                    <thead>
                         <tr>
-                            <td><%= i + 1 %></td>
-                            <td><%= leaderboard[i].username %></td>
-                            <td><%= leaderboard[i].total_points %></td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+                            <th class="RColumn">RANK #</th>
+                            <th class="PColumn">PLAYER</th>
+                            <th class="SColumn">SCORE</th>
+                        </tr>   
+                    </thead>
+                    <tbody>
+                        <% leaderboard.forEach((entry, index) => { %>
+                            <tr>
+                                <td class="RColumn"><%= index + 1 %></td>
+                                <td class="PColumn"><%= entry.username %></td>
+                                <td class="SColumn"><%= entry.total_points %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>No entries found.</p>
+            <% } %>
         </div>
-
-
-        <div id="featuredQuiz">
-            <h1>Featured Quiz</h1>
+        <div class="featuredQuiz">
+            <h1>Featured Quizzes</h1>
         </div>
     </div>
 </main>

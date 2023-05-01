@@ -1,0 +1,68 @@
+main{
+    padding-top: 3rem;
+}
+.container{
+    .leaderboard{
+        box-sizing: border-box;
+        border: 0.5px solid $whiteText;
+        border-radius: 1rem;
+        padding: 1rem 3rem 3rem 3rem;
+        width: 100%;
+        display: inline-block;
+        justify-content: center;
+        color: $whiteText;
+        h1{
+            padding-bottom: 1rem;
+            font-weight: bold;
+        }
+        table{
+            width: 100%;
+            text-align: center;
+            tr {
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            }
+            tr:first-child {
+                
+                border-top: none;
+            }
+            tr:last-child {
+                border-bottom: none;
+            }
+            tr:nth-child(even) {
+                background-color: rgba(0, 0, 0, 0.2);
+            }
+
+
+
+            th, td{
+                padding: 0.5 rem;
+            }
+            th{
+                font-size: 2rem;
+                font-weight: bold;
+            }
+            td{
+                font-size: 1.4rem;
+            }
+
+            .RColumn{
+                text-align: left;
+            }
+            .SColumn{
+                text-align: right;
+            }
+        }
+    }
+    .featuredQuiz{
+        box-sizing: border-box;
+        border: 0.5px solid $whiteText;
+        border-radius: 1rem;
+        padding: 1rem 3rem 3rem 3rem;
+        margin-top: 4rem;
+        width: 100%;
+        display: inline-block;
+        justify-content: center;
+        color: $whiteText;
+    }
+}
