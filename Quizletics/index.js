@@ -156,7 +156,6 @@ app.post('/register', async (req, res) => {
     else{
       db.any(insertQuery, values)
       .then(data => {
-        //console.log(data);
         res.render('pages/login', {message: "User Added Successfully", error: false});
       });
     }
@@ -316,7 +315,6 @@ app.get('/userProfile', (req, res) =>{
               console.log(`${err}`);
             });          
 
-
           })
           .catch(err => {
             console.log(`${err}`);
@@ -360,6 +358,76 @@ app.post("/submitQuiz", async (req, res) => {
   .catch(err => {
       console.log(`${err}`);
   });
+});
+
+app.post("/updateProfile", async (req, res) => {
+  const valUsername = req.session.user[0].username;
+  console.log(req.body);
+  console.log(valUsername);
+  if(req.body.newUsername){
+    const qFindUsername = `SELECT * FROM users WHERE username = '${req.body.newUsername}';`;
+   
+    db.any(qFindUsername)
+    .then(data=>{
+      if(data && (data.length > 0)){
+        res.redirect('/userProfile');
+        //res.render('pages/profile', {message: "Username Already Exists", error: true});
+      }
+      else{
+        const qUpdateUsername = `UPDATE users SET username = '${req.body.newUsername}' WHERE username = '${valUsername}' RETURNING *;`;
+        db.any(qUpdateUsername)
+        .then(data=>{
+          req.session.user = data;
+          req.session.save();
+          res.redirect('/userProfile');
+        })
+        .catch(err => {
+          console.log(`${err}`);
+        });
+      }
+
+    })
+    .catch(err => {
+      console.log(`${err}`);
+    });
+
+  }
+  else if(req.body.newPassword){
+    //does confirmed password match?
+    if(req.body.newPassword != req.body.newPasswordConfirm){
+      res.render('pages/profile', {message: "Passwords do not match", error: true});
+    }
+    
+    else{
+      const hash = await bcrypt.hash(req.body.newPassword, 10);
+      const qUpdatePassword = `UPDATE users SET password = '${hash}' WHERE username = '${valUsername}' RETURNING *;`;
+      db.any(qUpdatePassword)
+      .then(data=>{
+        req.session.user = data;
+        req.session.save();
+        res.redirect('/userProfile');
+      })
+      .catch(err => {
+        console.log(`${err}`);
+      });
+    }
+
+  }
+  else if(req.body.newEmail){
+    console.log(req.body.newEmail);
+    const qUpdateEmail = `UPDATE users SET email = '${req.body.newEmail}' WHERE username = '${valUsername}' RETURNING *;`;
+    db.any(qUpdateEmail)
+    .then(data=>{
+      req.session.user = data;
+      req.session.save();
+      res.redirect('/userProfile');
+    })
+    .catch(err => {
+      console.log(`${err}`);
+    });
+  }
+ 
+
 });
 
 // Authentication Required
