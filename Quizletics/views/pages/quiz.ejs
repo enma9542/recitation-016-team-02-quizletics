@@ -3,25 +3,23 @@
 <%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
 
 <style>
-
-
-  .answer{
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
+  body, html {
+    height: 100%;
+    margin: 0;
   }
-  .question{
-    max-width: 40vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+  
   #start-quiz-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 100%;
     position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    opacity: 1;
     transition: opacity 1s;
   } 
 .timer-score {
@@ -30,12 +28,10 @@
   width: 50%;
   margin-bottom: 20px;
   }
-
   #go-back-btn{
-    align-self: stretch;
-    background-color: #050505;
+    background-color: #3498db;
     border: none;
-    color: #f5f5f5;
+    color: white;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -44,90 +40,78 @@
     cursor: pointer;
     border-radius: 4px;
     transition-duration: 0.4s;
-    padding: 1rem;
   }
   #goBackButton:hover {
-    background-color: #3d3d3d;
+    background-color: #5dade2;
     color: white;
   }
-
   h3 {
-    color: #f5f5f5;
-    margin-bottom: 2rem;
+    color: black;
+    margin-bottom: 20px;
   }
-
   .answer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: stretch;
-    padding: 1rem 0 1rem 0;
+    display: inline-block;
+    width: 48%;
+    margin-bottom: 10px;
+    text-align: center;
   }
-
   .answer-btn {
-    padding: 1rem;
+    padding: 40px;
+    width: 100%;
     border: 2px solid #ccc;
+    background-color: #fff;
     cursor: pointer;
-    border-radius: 2rem;
-    font-size: 1.5rem;
+    border-radius: 5px;
+    font-size: 24px;
   }
-
   .answer-btn:hover {
     border-color: #999;
   }
-
   .answer-msg {
-    text-align: center;
     display: inline;
     padding-left: 10px;
     font-weight: bold;
     font-size: 14px;
   }
-
   .answer-msg.correct {
     color: green;
   }
-
   .answer-msg.incorrect {
     color: red;
   }
-
   #quiz-container {
+    background-color: white;
     padding: 50px;
     font-size: 28px;
     opacity: 1;
     transition: opacity 0.5s ease;
   }
-
   #quiz-container.fade-out {
     opacity: 0;
   }
-
   .timer,
   .score {
     font-size: 1.5em;
   }
-
 #start-quiz-btn {
-    font-size: 3em;
-    padding: 3rem 6rem;
+    font-size: 1.5em;
+    padding: 15px 30px;
     cursor: pointer;
-    background-color: #f5f5f5;
-    color: #050505;
+    background-color: #4CAF50;
+    color: white;
     border: none;
     border-radius: 5px;
 }
-
 </style>
 
 <main>
   <div id="start-quiz-container" style="display: flex; justify-content: center; align-items: center;">
     <button id="start-quiz-btn" type="button">Start Quiz</button>
-    <button id="go-back-btn">Go Back</button>
+    <button id="go-back-btn" style="margin-top: 10px;">Go Back</button>
   </div>
   <form id="quiz-form">
-    <div>
-      <div id="quiz-container">
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <div id="quiz-container" style="display:none;">
       </div>
     </div>
   </form>
@@ -138,19 +122,15 @@
     const apiData = <%- JSON.stringify(locals.data) %>;
     let currentQuestionIndex = 0;
     let score = 0;
-
     document.getElementById('start-quiz-btn').addEventListener('click', () => {
       document.getElementById('start-quiz-container').style.display = 'none';
       document.getElementById('quiz-container').style.display = 'block';
       displayQuestion(apiData, currentQuestionIndex);
     });
-
     document.getElementById('go-back-btn').addEventListener('click', () => {
       window.location.href = '/';
     });
-
     let isAnswerBlocked = false;
-
     function blockAnswers() {
       isAnswerBlocked = true;
       const answerButtons = document.querySelectorAll('.answer-btn');
@@ -158,7 +138,6 @@
         btn.disabled = true;
       });
     }
-
     function unblockAnswers() {
       isAnswerBlocked = false;
       const answerButtons = document.querySelectorAll('.answer-btn');
@@ -202,7 +181,6 @@
         const answerDiv = button.parentElement;
         const answerMsg = document.createElement('span');
         answerMsg.classList.add('answer-msg');
-
         if (answer === apiData[questionIndex].correctAnswer) {
           score += 10;
           button.style.borderColor = 'green';
@@ -236,7 +214,7 @@
           answerDiv.appendChild(answerMsg);
     
           // Block answers and start the countdown
-          const countdownDuration = 3; // Set the duration (in seconds) for the countdown
+          const countdownDuration = 5; // Set the duration (in seconds) for the countdown
           let remainingTime = countdownDuration;
           blockAnswers();
           const countdownInterval = setInterval(() => {
@@ -255,7 +233,3 @@
     });
   </script>
   
-
-
-
-

@@ -164,7 +164,7 @@ app.post('/register', async (req, res) => {
     }
   });
 
-// });
+});
 
 app.get('/register', (req, res) => {
   res.render("pages/register", {
@@ -343,7 +343,7 @@ app.get('/userProfile', (req, res) =>{
 
     
   
-// });
+});
 
 app.post("/submitQuiz", async (req, res) => {
   var valUsername = req.session.user[0].username;
@@ -355,8 +355,8 @@ app.post("/submitQuiz", async (req, res) => {
   var valScore = (valNum_correct * 50) - (valTime * 10);
   var gameVals = [valTime, valDiff, valCategory, valNum_correct, valScore];
 
-//   var insertGameQuery = `INSERT INTO games (time_taken, difficulty, category, num_correct, score) VALUES ($1, $2, $3, $4, $5) returning game_id;`;
-//   var insertUTGQuery = `INSERT INTO user_to_game (username, game_id) VALUES;`;
+  var insertGameQuery = `INSERT INTO games (time_taken, difficulty, category, num_correct, score) VALUES ($1, $2, $3, $4, $5) returning game_id;`;
+  var insertUTGQuery = `INSERT INTO user_to_game (username, game_id) VALUES;`;
 
   db.any(insertGameQuery, gameVals)
   .then( data=>{   
