@@ -194,7 +194,7 @@ app.get('/userProfile', (req, res) =>{
   if(!req.session.user){
     res.render("pages/login", {message: 'Must Be Logged In to View Profile Page', error: true});
   }
-
+  var user = req.session.user[0];
   var valUsername = req.session.user[0].username;
   var quizzesTaken;
   var pointsEarned;
@@ -465,7 +465,7 @@ app.post("/updateProfile", async (req, res) => {
 });
 
 // // Authentication Required
-// app.use(auth);
+ app.use(auth);
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->
