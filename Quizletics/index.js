@@ -135,32 +135,34 @@ app.post('/login', async (req, res) => {
       });
 });
 
-// // Register
-// app.post('/register', async (req, res) => {
-//   //hash the password using bcrypt library
-//   if(req.body.password != req.body.password_confirm){
-//     res.render('pages/register', {message: "Passwords do not match", error: true});
-//   }
-//   const hash = await bcrypt.hash(req.body.password, 10);
+// Register
+app.post('/register', async (req, res) => {
+  //hash the password using bcrypt library
+  if(req.body.password != req.body.password_confirm){
+    res.render('pages/register', {message: "Passwords do not match", error: true});
+  }
+  const hash = await bcrypt.hash(req.body.password, 10);
+
+  let currentDate = new Date().toISOString().slice(0, 10)
+  console.log("currentDate: ", currentDate);
 
   // To-DO: Insert username and hashed password into 'users' table
   const searchQuery = "SELECT * FROM users where username = $1;";
   const insertQuery = "INSERT INTO users (username, password, email, date_joined) VALUES ($1, $2, $3, $4) returning *;"
   const values = [req.body.username, hash, req.body.email, currentDate];
 
-//   db.any(searchQuery, [req.body.username])
-//   .then(data => {
-//     if(data && (data.length > 0)){
-//       res.render('pages/register', {message: "Username Already Exists, Please Choose New Username.", error: true});
-//     }
-//     else{
-//       db.any(insertQuery, values)
-//       .then(data => {
-//         //console.log(data);
-//         res.render('pages/login', {message: "User Added Successfully", error: false});
-//       });
-//     }
-//   });
+  db.any(searchQuery, [req.body.username])
+  .then(data => {
+    if(data && (data.length > 0)){
+      res.render('pages/register', {message: "Username Already Exists, Please Choose New Username.", error: true});
+    }
+    else{
+      db.any(insertQuery, values)
+      .then(data => {
+        res.render('pages/login', {message: "User Added Successfully", error: false});
+      });
+    }
+  });
 
 // });
 
@@ -235,8 +237,12 @@ app.get('/userProfile', (req, res) =>{
           achievement4 : achievement4,
           dateJoined : dateJoined,
           username: valUsername,
-          email: email
+          email: email,
+          message: msg,
+          error: msgerr
         };
+        msg = '';
+        msgerr = false;
         console.log("email: ",vals.email);
         console.log("dateJoined: ",vals.dateJoined);
         console.log("username: ",vals.username);
@@ -297,8 +303,12 @@ app.get('/userProfile', (req, res) =>{
                     achievement4 : achievement4,
                     dateJoined : dateJoined,
                     username: valUsername,
-                    email: email
+                    email: email,
+                    message: msg,
+                    error: msgerr
                   };
+                  msg = '';
+                  msgerr = false;
                 res.render('pages/profile', vals);
                 })
                 .catch(err => {
@@ -315,7 +325,6 @@ app.get('/userProfile', (req, res) =>{
             .catch(err => {
               console.log(`${err}`);
             });          
-
 
           })
           .catch(err => {
@@ -349,18 +358,90 @@ app.post("/submitQuiz", async (req, res) => {
 //   var insertGameQuery = `INSERT INTO games (time_taken, difficulty, category, num_correct, score) VALUES ($1, $2, $3, $4, $5) returning game_id;`;
 //   var insertUTGQuery = `INSERT INTO user_to_game (username, game_id) VALUES;`;
 
-//   db.any(insertGameQuery, gameVals)
-//   .then( data=>{   
-//       var utgVals = [valUsername, data];
-//       db.any(insertUTGQuery, utgVals)
-//       .catch(err => {
-//         console.log(`${err}`);
-//       });
-//   })
-//   .catch(err => {
-//       console.log(`${err}`);
-//   });
-// });
+  db.any(insertGameQuery, gameVals)
+  .then( data=>{   
+      var utgVals = [valUsername, data];
+      db.any(insertUTGQuery, utgVals)
+      .catch(err => {
+        console.log(`${err}`);
+      });
+  })
+  .catch(err => {
+      console.log(`${err}`);
+  });
+});
+
+app.post("/updateProfile", async (req, res) => {
+  const valUsername = req.session.user[0].username;
+  console.log(req.body);
+  console.log(valUsername);
+  if(req.body.newUsername){
+    const qFindUsername = `SELECT * FROM users WHERE username = '${req.body.newUsername}';`;
+   
+    db.any(qFindUsername)
+    .then(data=>{
+      if(data && (data.length > 0)){
+        msg = "Username Already Exists";
+        msgerr = true;
+        res.redirect('/userProfile');
+        //res.render('pages/profile', {message: "Username Already Exists", error: true});
+      }
+      else{
+        const qUpdateUsername = `UPDATE users SET username = '${req.body.newUsername}' WHERE username = '${valUsername}' RETURNING *;`;
+        db.any(qUpdateUsername)
+        .then(data=>{
+          req.session.user = data;
+          req.session.save();
+          res.redirect('/userProfile');
+        })
+        .catch(err => {
+          console.log(`${err}`);
+        });
+      }
+
+    })
+    .catch(err => {
+      console.log(`${err}`);
+    });
+
+  }
+  else if(req.body.newPassword){
+    //does confirmed password match?
+    if(req.body.newPassword != req.body.newPasswordConfirm){
+      res.render('pages/profile', {message: "Passwords do not match", error: true});
+    }
+    
+    else{
+      const hash = await bcrypt.hash(req.body.newPassword, 10);
+      const qUpdatePassword = `UPDATE users SET password = '${hash}' WHERE username = '${valUsername}' RETURNING *;`;
+      db.any(qUpdatePassword)
+      .then(data=>{
+        req.session.user = data;
+        req.session.save();
+        res.redirect('/userProfile');
+      })
+      .catch(err => {
+        console.log(`${err}`);
+      });
+    }
+
+  }
+  else if(req.body.newEmail){
+    console.log(req.body.newEmail);
+    const qUpdateEmail = `UPDATE users SET email = '${req.body.newEmail}' WHERE username = '${valUsername}' RETURNING *;`;
+    db.any(qUpdateEmail)
+    .then(data=>{
+      req.session.user = data;
+      req.session.save();
+      res.redirect('/userProfile');
+    })
+    .catch(err => {
+      console.log(`${err}`);
+    });
+  }
+ 
+
+});
 
 // // Authentication Required
 // app.use(auth);
