@@ -15,14 +15,34 @@
                 <div class="row">
                     <div class="col-sm">
                       <div class="awardbox">
-                        <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p> <%= achievement1 %></p>
+                        <%
+                          if(achievements[0]){
+                            if(achievements[0].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[0].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[0].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[0].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
+                            %>
+                        
+                        <p> <%= achievements[0] %></p>
+                        <%
+                          }
+                        %>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="awardbox">
-                        <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p><%= achievement2 %></p>
+                        <%
+                          if(achievements[1]){
+                            if(achievements[1].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[1].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[1].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[1].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
+                            %>
+                        
+                        <p> <%= achievements[1] %></p>
+                        <%
+                          }
+                        %>
                       </div>
                     </div>
                   </div>
@@ -30,14 +50,34 @@
                   <div class="row">
                     <div class="col-sm">
                       <div class="awardbox">
-                        <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p><%= achievement3 %></p>
+                        <%
+                          if(achievements[2]){
+                            if(achievements[2].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[2].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[2].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[2].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
+                            %>
+                        
+                        <p> <%= achievements[2] %></p>
+                        <%
+                          }
+                        %>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="awardbox">
-                        <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p><%= achievement4 %></p>
+                        <%
+                          if(achievements[3]){
+                            if(achievements[3].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[3].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[3].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[3].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
+                            %>
+                        
+                        <p> <%= achievements[3] %></p>
+                        <%
+                          }
+                        %>
                       </div>
                     </div>
                   </div>
