@@ -16,13 +16,13 @@
                     <div class="col-sm">
                       <div class="awardbox">
                         <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p>[Award Name]</p>
+                        <p> <%= achievement1 %></p>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="awardbox">
                         <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p>[Award Name]</p>
+                        <p><%= achievement2 %></p>
                       </div>
                     </div>
                   </div>
@@ -31,13 +31,13 @@
                     <div class="col-sm">
                       <div class="awardbox">
                         <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p>[Award Name]</p>
+                        <p><%= achievement3 %></p>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="awardbox">
                         <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p>[Award Name]</p>
+                        <p><%= achievement4 %></p>
                       </div>
                     </div>
                   </div>
@@ -66,40 +66,154 @@
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePhotoModal">
                 Update Photo
             </button>
+
+
             <div class="modal" id="updatePhotoModal" tabindex="-1" role="dialog" aria-labelledby="updatePhotoModalTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div class="modal-body">
                         <form>
-                            <p>Please Work</p>
+                          <label for="avatar">Upload a picture: </label>
+
+                          <input type="file"
+                                 id="avatar" name="avatar"
+                                 accept="image/png, image/jpeg">
+                            <div class="submission-buttons">
+                              <button type="submit" class="btn btn-primary">Save changes</button>
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save changes</button>
                     </div>
                   </div>
                 </div>
             </div>
 
-            <h3>Username</h3>
+            <h3><%= username %></h3>
         </div>
         <div class="account-info">
             <h4>Account Information</h4> <!-- Date Joined?-->
-            <p>Date Joined: [Date]</p>
-            <p>Associated Email: [Email]</p>
+            <p>Date Joined: <%= dateJoined %></p>
+            <p>Associated Email: <%= email %></p>
         </div>
         <div class="account-settings">
             <h4>Account Settings</h4>
-            <p>Change Username</p> <!-- Same thing as register except it updates the user info instead of creating new thing-->
-            <p>Change Password</p> <!-- Same thing as register except it updates the user info instead of creating new thing-->
-            <p>Change Associated Email</p> <!-- Same thing as register except it updates the user info instead of creating new thing; current password must match, include password confirmation-->
+            <div class="button-div">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateUsernameModal">
+                Change Username
+              </button>
+            </div>
+
+            <div class="button-div">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePasswordModal">
+                Change Password
+              </button>
+            </div>
+
+            <div class="button-div">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateEmailModal">
+                Change Associated Email
+              </button>
+            </div>
+
+            <div class="modal" id="updateUsernameModal" tabindex="-1" role="dialog" aria-labelledby="updateUsernameModalTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      <form action="/updateProfile" method="post" class="update-username-form">
+                          <!-- LOCATION -->
+                          <div class="mb-3">
+                            <label for="newUsername" class="form-label">New Username</label>
+                            <input type="text" class="form-control" id="newUsername" name="newUsername">
+                          </div>
+                          <div class="submission-buttons">
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          </div>
+                      </form>
+                  </div>
+                  <div class="modal-footer">
+                  </div>
+                </div>
+              </div>
+          </div>
+
+
+          <div class="modal" id="updatePasswordModal" tabindex="-1" role="dialog" aria-labelledby="updatePasswordModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/updateProfile" method="post" class="update-password-form">
+                        <!-- LOCATION -->
+                        <div class="mb-3">
+                          <label for="current-password" class="form-label">Current Password</label>
+                          <input type="text" class="form-control" id="current-password" name="currentPassword">
+                        </div>
+                        <div class="mb-3">
+                          <label for="newPassword" class="form-label">New Password</label>
+                          <input type="text" class="form-control" id="newPassword" name="newPassword">
+                        </div>
+                        <div class="mb-3">
+                          <label for="newPasswordConfirm" class="form-label">Confirm New Password</label>
+                          <input type="text" class="form-control" id="newPasswordConfirm" name="newPasswordConfirm">
+                        </div>
+                        <div class="submission-buttons">
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="modal" id="updateEmailModal" tabindex="-1" role="dialog" aria-labelledby="updateEmailModalTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <form action="/updateProfile" method="post" class="update-email-form">
+                    <div class="mb-3">
+                      <label for="email" class="form-label">New Email</label>
+                      <input type="text" class="form-control" id="newEmail" name="newEmail">
+                    </div>
+                      <div class="submission-buttons">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+              </div>
+            </div>
+          </div>
+      </div>
         </div>
     </div>
     <div class="profile-card">
@@ -114,14 +228,14 @@
                     <div class="statbox">
                         <p>Quizzes Taken</p>
                         <hr>
-                        <h3>99999</h3>
+                        <h3><%= quizzesTaken %></h3>
                     </div>
                   </div>
                   <div class="col-sm">
                     <div class="statbox">
                         <p>Points Earned</p>
                         <hr>
-                        <h3>999999</h3>
+                        <h3><%= pointsEarned %></h3>
                     </div>
                   </div>
                 </div>
@@ -131,14 +245,14 @@
                       <div class="statbox">
                           <p>Total Time Spent</p>
                           <hr>
-                          <h3>999999</h3>
+                          <h3><%= totTime %></h3>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="statbox">
                           <p>Best Time</p>
                           <hr>
-                          <h3>999999</h3>
+                          <h3><%= bestTime %></h3>
                       </div>
                     </div>
                   </div>
@@ -148,14 +262,14 @@
                       <div class="statbox">
                           <p>Best Score</p>
                           <hr>
-                          <h3>999999</h3>
+                          <h3><%= bestScore %></h3>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="statbox">
                           <p>Highest Accuracy</p>
                           <hr>
-                          <h3>999999</h3>
+                          <h3><%= bestAccuracy %></h3>
                       </div>
                     </div>
                   </div>
