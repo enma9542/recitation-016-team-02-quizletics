@@ -143,6 +143,9 @@ app.post('/register', async (req, res) => {
   }
   const hash = await bcrypt.hash(req.body.password, 10);
 
+  let currentDate = new Date().toISOString().slice(0, 10)
+  console.log("currentDate: ", currentDate);
+
   // To-DO: Insert username and hashed password into 'users' table
   const searchQuery = "SELECT * FROM users where username = $1;";
   const insertQuery = "INSERT INTO users (username, password, email, date_joined) VALUES ($1, $2, $3, $4) returning *;"
@@ -234,8 +237,12 @@ app.get('/userProfile', (req, res) =>{
           achievement4 : achievement4,
           dateJoined : dateJoined,
           username: valUsername,
-          email: email
+          email: email,
+          message: msg,
+          error: msgerr
         };
+        msg = '';
+        msgerr = false;
         console.log("email: ",vals.email);
         console.log("dateJoined: ",vals.dateJoined);
         console.log("username: ",vals.username);
@@ -296,8 +303,12 @@ app.get('/userProfile', (req, res) =>{
                     achievement4 : achievement4,
                     dateJoined : dateJoined,
                     username: valUsername,
-                    email: email
+                    email: email,
+                    message: msg,
+                    error: msgerr
                   };
+                  msg = '';
+                  msgerr = false;
                 res.render('pages/profile', vals);
                 })
                 .catch(err => {
@@ -370,6 +381,8 @@ app.post("/updateProfile", async (req, res) => {
     db.any(qFindUsername)
     .then(data=>{
       if(data && (data.length > 0)){
+        msg = "Username Already Exists";
+        msgerr = true;
         res.redirect('/userProfile');
         //res.render('pages/profile', {message: "Username Already Exists", error: true});
       }
