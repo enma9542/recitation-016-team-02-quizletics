@@ -3,23 +3,25 @@
 <%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
 
 <style>
-  body, html {
-    height: 100%;
-    margin: 0;
+
+
+  .answer{
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
   }
-  
+  .question{
+    max-width: 40vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
   #start-quiz-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
     position: absolute;
-    top: 0;
-    left: 0;
-    background-color: rgba(255, 255, 255, 0.8);
-    opacity: 1;
     transition: opacity 1s;
   } 
 .timer-score {
@@ -28,10 +30,12 @@
   width: 50%;
   margin-bottom: 20px;
   }
+
   #go-back-btn{
-    background-color: #3498db;
+    align-self: stretch;
+    background-color: #050505;
     border: none;
-    color: white;
+    color: #f5f5f5;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -40,78 +44,108 @@
     cursor: pointer;
     border-radius: 4px;
     transition-duration: 0.4s;
+    padding: 1rem;
   }
   #goBackButton:hover {
-    background-color: #5dade2;
+    background-color: #3d3d3d;
     color: white;
   }
+
   h3 {
-    color: black;
-    margin-bottom: 20px;
+    color: #f5f5f5;
+    margin-bottom: 2rem;
   }
+
   .answer {
-    display: inline-block;
-    width: 48%;
-    margin-bottom: 10px;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    padding: 1rem 0 1rem 0;
   }
+
   .answer-btn {
-    padding: 40px;
-    width: 100%;
+    padding: 1rem;
     border: 2px solid #ccc;
-    background-color: #fff;
     cursor: pointer;
-    border-radius: 5px;
-    font-size: 24px;
+    border-radius: 2rem;
+    font-size: 1.5rem;
   }
+
   .answer-btn:hover {
     border-color: #999;
   }
+
   .answer-msg {
+    text-align: center;
     display: inline;
     padding-left: 10px;
     font-weight: bold;
     font-size: 14px;
   }
+
   .answer-msg.correct {
     color: green;
   }
+
   .answer-msg.incorrect {
     color: red;
   }
+
   #quiz-container {
-    background-color: white;
     padding: 50px;
     font-size: 28px;
     opacity: 1;
     transition: opacity 0.5s ease;
   }
+
   #quiz-container.fade-out {
     opacity: 0;
+    transition: opacity 0.5s ease;
   }
+  
+
+  .timer-score-container {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #222;
+    padding: 1rem;
+  }
+ 
   .timer,
   .score {
     font-size: 1.5em;
+    color: #f5f5f5;
   }
+
 #start-quiz-btn {
-    font-size: 1.5em;
-    padding: 15px 30px;
+    font-size: 3em;
+    padding: 3rem 6rem;
     cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
+    background-color: #f5f5f5;
+    color: #050505;
     border: none;
     border-radius: 5px;
 }
+
 </style>
 
 <main>
   <div id="start-quiz-container" style="display: flex; justify-content: center; align-items: center;">
     <button id="start-quiz-btn" type="button">Start Quiz</button>
-    <button id="go-back-btn" style="margin-top: 10px;">Go Back</button>
-  </div>
+    <button id="go-back-btn">Go Back</button>
+  </div> 
   <form id="quiz-form">
-    <div style="display: flex; justify-content: center; align-items: center;">
-      <div id="quiz-container" style="display:none;">
+    <div>
+      <div id="quiz-container">
+      </div>
+      <div class="timer-score-container">
+          <div class="timer">Time: <span id="timer">00:00</span></div>
+          <div class="score">Score: <span id="score">0</span></div>
       </div>
     </div>
   </form>
@@ -120,116 +154,163 @@
 
   <script>
     const apiData = <%- JSON.stringify(locals.data) %>;
-    let currentQuestionIndex = 0;
-    let score = 0;
-    document.getElementById('start-quiz-btn').addEventListener('click', () => {
-      document.getElementById('start-quiz-container').style.display = 'none';
-      document.getElementById('quiz-container').style.display = 'block';
-      displayQuestion(apiData, currentQuestionIndex);
+let currentQuestionIndex = 0;
+let numCorrect = 0;
+let startTime = 0;
+let timeElapsed = 0;
+let timerInterval;
+
+function startTimer() {
+  startTime = Date.now();
+  timerInterval = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+  timeElapsed = Math.floor((Date.now() - startTime) / 1000);
+  const minutes = Math.floor(timeElapsed / 60);
+  const seconds = timeElapsed % 60;
+  document.getElementById('timer').innerText = (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+}
+
+function calculateScore(numCorrect, timeElapsed) {
+  const score = (numCorrect * 100) - (timeElapsed * 5);
+  return Math.max(score, 0);
+}
+
+function updateScoreDisplay() {
+  const score = calculateScore(numCorrect, timeElapsed);
+  document.getElementById('score').innerText = `${score}`;
+}
+
+document.getElementById('start-quiz-btn').addEventListener('click', () => {
+  document.getElementById('start-quiz-container').style.display = 'none';
+  document.getElementById('quiz-container').style.display = 'block';
+  displayQuestion(apiData, currentQuestionIndex);
+  startTimer();
+});
+
+document.getElementById('go-back-btn').addEventListener('click', () => {
+  window.location.href = '/';
+});
+
+let isAnswerBlocked = false;
+
+function blockAnswers() {
+  isAnswerBlocked = true;
+  const answerButtons = document.querySelectorAll('.answer-btn');
+  answerButtons.forEach((btn) => {
+    btn.disabled = true;
+  });
+}
+
+function unblockAnswers() {
+  isAnswerBlocked = false;
+  const answerButtons = document.querySelectorAll('.answer-btn');
+  answerButtons.forEach((btn) => {
+    if (!btn.hasAttribute('data-clicked')) {
+      btn.disabled = false;
+    }
+  });
+}
+
+function displayQuestion(questions, index) {
+  const quizContainer = document.getElementById('quiz-container');
+  quizContainer.classList.remove('fade-out');
+  quizContainer.innerHTML = '';
+
+  const questionObj = questions[index];
+  const questionDiv = document.createElement('div');
+  questionDiv.classList.add('question');
+  questionDiv.innerHTML = `
+    <h3>Question ${index + 1}: ${questionObj.question.text}</h3>
+  `;
+
+  const answers = [questionObj.correctAnswer, ...questionObj.incorrectAnswers].sort(() => Math.random() - 0.5);
+
+  answers.forEach((answer, answerIndex) => {
+    const answerDiv = document.createElement('div');
+    answerDiv.classList.add('answer');
+    answerDiv.innerHTML = `
+      <button type="button" class="answer-btn" data-question="${index}" data-answer="${answer}">
+        ${answer}
+      </button>
+    `;
+    questionDiv.appendChild(answerDiv);
+  });
+
+  quizContainer.appendChild(questionDiv);
+}
+
+document.addEventListener('click', (event) => {
+  if (event.target.matches('.answer-btn') && !isAnswerBlocked) {
+    const button = event.target;
+    const questionIndex = parseInt(button.dataset.question);
+    const answer = button.dataset.answer;
+    const answerDiv = button.parentElement;
+    const answerMsg = document.createElement('span');
+    answerMsg.classList.add('answer-msg');
+
+    button.setAttribute('data-clicked', 'true');
+
+    if (answer === apiData[questionIndex].correctAnswer) {
+      numCorrect++;
+      button.style.borderColor = 'green';
+      answerMsg.innerText = 'Correct!';
+      answerMsg.classList.add('correct');
+      answerDiv.appendChild(answerMsg);
+      updateScoreDisplay();
+    } else {
+      button.style.borderColor = 'red';
+      answerMsg.innerText = 'Incorrect!';
+      answerMsg.classList.add('incorrect');
+      answerDiv.appendChild(answerMsg);
+      updateScoreDisplay();
+    }
+
+    // Disable all answer buttons for the current question
+    const allAnswerButtons = document.querySelectorAll('.answer-btn[data-question="' + questionIndex + '"]');
+    allAnswerButtons.forEach((btn) => {
+      btn.disabled = true;
     });
-    document.getElementById('go-back-btn').addEventListener('click', () => {
-      window.location.href = '/';
-    });
-    let isAnswerBlocked = false;
-    function blockAnswers() {
-      isAnswerBlocked = true;
-      const answerButtons = document.querySelectorAll('.answer-btn');
-      answerButtons.forEach((btn) => {
-        btn.disabled = true;
-      });
-    }
-    function unblockAnswers() {
-      isAnswerBlocked = false;
-      const answerButtons = document.querySelectorAll('.answer-btn');
-      answerButtons.forEach((btn) => {
-        btn.disabled = false;
-      });
-    }
-    function displayQuestion(questions, index) {
-      const quizContainer = document.getElementById('quiz-container');
-      quizContainer.classList.remove('fade-out');
-      quizContainer.innerHTML = '';
-  
-      const questionObj = questions[index];
-      const questionDiv = document.createElement('div');
-      questionDiv.classList.add('question');
-      questionDiv.innerHTML = `
-        <h3>Question ${index + 1}: ${questionObj.question.text}</h3>
-      `;
-  
-      const answers = [questionObj.correctAnswer, ...questionObj.incorrectAnswers].sort(() => Math.random() - 0.5);
-  
-      answers.forEach((answer, answerIndex) => {
-        const answerDiv = document.createElement('div');
-        answerDiv.classList.add('answer');
-        answerDiv.innerHTML = `
-          <button type="button" class="answer-btn" data-question="${index}" data-answer="${answer}">
-            ${answer}
-          </button>
-        `;
-        questionDiv.appendChild(answerDiv);
-      });
-  
-      quizContainer.appendChild(questionDiv);
-    }
-  
-    document.addEventListener('click', (event) => {
-      if (event.target.matches('.answer-btn') && !isAnswerBlocked) {
-        const button = event.target;
-        const questionIndex = parseInt(button.dataset.question);
-        const answer = button.dataset.answer;
-        const answerDiv = button.parentElement;
-        const answerMsg = document.createElement('span');
-        answerMsg.classList.add('answer-msg');
-        if (answer === apiData[questionIndex].correctAnswer) {
-          score += 10;
-          button.style.borderColor = 'green';
-          answerMsg.innerText = 'Correct!';
-          answerMsg.classList.add('correct');
-          answerDiv.appendChild(answerMsg);
-          // Disable all answer buttons for the current question
-      const allAnswerButtons = document.querySelectorAll('.answer-btn[data-question="' + questionIndex + '"]');
-      allAnswerButtons.forEach((btn) => {
-        btn.disabled = true;
-      });
-      if (questionIndex + 1 < apiData.length) {
+
+    // Move to the next question
+    if (questionIndex + 1 < apiData.length) {
+      setTimeout(() => {
+        const quizContainer = document.getElementById('quiz-container');
+        quizContainer.classList.add('fade-out');
         setTimeout(() => {
-          const quizContainer = document.getElementById('quiz-container');
-          quizContainer.classList.add('fade-out'); // Add the fade-out class
-          setTimeout(() => {
-            currentQuestionIndex++;
-            displayQuestion(apiData, currentQuestionIndex);
-          }, 500); // Adjust the delay as needed
-        }, 2000);
-          } else {
-            setTimeout(() => {
-              alert('Congratulations! You have completed the quiz.');
-            }, 2000);
-          }
-        } else {
-          button.style.borderColor = 'red';
-          button.disabled = true;
-          answerMsg.innerText = 'Incorrect! Please wait...';
-          answerMsg.classList.add('incorrect');
-          answerDiv.appendChild(answerMsg);
-    
-          // Block answers and start the countdown
-          const countdownDuration = 5; // Set the duration (in seconds) for the countdown
-          let remainingTime = countdownDuration;
-          blockAnswers();
-          const countdownInterval = setInterval(() => {
-            remainingTime--;
-            answerMsg.innerText = `Incorrect! Wait ${remainingTime} seconds...`;
-            if (remainingTime === 0) {
-              clearInterval(countdownInterval);
-              answerMsg.innerText = 'Incorrect! You can try again.';
-              button.disabled = false;
-              button.style.borderColor = '#ccc';
-              unblockAnswers();
-            }
-          }, 1000);
-        }
-      }
-    });
+          currentQuestionIndex++;
+          displayQuestion(apiData, currentQuestionIndex);
+        }, 1000);
+      }, 2000);
+    } else {
+      setTimeout(() => {
+        const quizContainer = document.getElementById('quiz-container');
+        quizContainer.classList.add('fade-out');
+        clearInterval(timerInterval);
+        updateScoreDisplay(); // Update the score display right before showing results
+        setTimeout(() => {
+          quizContainer.classList.remove('fade-out');
+          displayResults();
+        }, 1000);
+      }, 2000);
+    }
+  }
+});
+
+
+function displayResults() {
+  const score = calculateScore(numCorrect, timeElapsed);
+  const quizContainer = document.getElementById('quiz-container');
+  quizContainer.innerHTML = `
+    <h2>Quiz Completed!</h2>
+    <p>Score: ${score}</p>
+    <p>Number of correct answers: ${numCorrect}</p>
+    <p>Time taken: ${timeElapsed} seconds</p>
+    <button id="go-back-btn">Go Back</button>
+  `;
+}
+
+
+
   </script>
-  

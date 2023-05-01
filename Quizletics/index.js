@@ -72,6 +72,9 @@ app.use(
 //API Routes Go Here
 //quiz page
 app.get('/quiz', (req, res) => { 
+  if(!req.session.user){
+    res.render("pages/login", {message: 'Must Be Logged In to Take Quiz', error: true});
+  }
   const category = req.query.category; // get the category from the query string
   const difficulty = req.query.difficulty; // get the difficulty from the query string
 
@@ -119,13 +122,13 @@ app.get('/leaderboard', (req, res) => {
     });
 });
 
-// //Test API
-// app.get('/welcome', (req, res) => {
-//   res.json({status: 'success', message: 'Welcome!'});
-// });
-// app.get('/', (req, res) => {
-//     res.redirect('/login');
-// });
+//Test API
+app.get('/welcome', (req, res) => {
+  res.json({status: 'success', message: 'Welcome!'});
+});
+app.get('/', (req, res) => {
+    res.redirect('/login');
+});
 
 app.get('/login', (req, res) => {
     res.render('pages/login');
@@ -169,8 +172,8 @@ app.post('/register', async (req, res) => {
 
   // To-DO: Insert username and hashed password into 'users' table
   const searchQuery = "SELECT * FROM users where username = $1;";
-  const insertQuery = "INSERT INTO users (username, password, email, date_joined) VALUES ($1, $2, $3, $4) returning *;"
-  const values = [req.body.username, hash, req.body.email, currentDate];
+  const insertQuery = "INSERT INTO users (username, password, email, avatar_picture, date_joined) VALUES ($1, $2, $3, $4, $5) returning *;"
+  const values = [req.body.username, hash, req.body.email, '/icons-img/logo.svg', currentDate];
 
   db.any(searchQuery, [req.body.username])
   .then(data => {
@@ -196,27 +199,29 @@ app.get('/register', (req, res) => {
   msgerr = false;
 });
 
-// app.get("/logout", (req, res) => {
-//   req.session.destroy();
-//   res.render("pages/login", {message: 'Logged Out Successfully.'});
-// });
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.render("pages/login", {message: 'Logged Out Successfully.'});
+});
 
 
 
-// // Authentication Middleware.
-// const auth = (req, res, next) => {
-//     if (!req.session.user) {
-//       // Default to login page.
-//       return res.redirect('/login');
-//     }
-//     next();
-// };
+// Authentication Middleware.
+const auth = (req, res, next) => {
+    if (!req.session.user) {
+      // Default to login page.
+      return res.redirect('/login');
+    }
+    next();
+};
 
 app.get('/userProfile', (req, res) =>{
+  res.setHeader('Cache-Control', 'no-cache');
   if(!req.session.user){
     res.render("pages/login", {message: 'Must Be Logged In to View Profile Page', error: true});
   }
-  
+
+  var user = req.session.user[0];
   var valUsername = req.session.user[0].username;
   var quizzesTaken;
   var pointsEarned;
@@ -224,12 +229,9 @@ app.get('/userProfile', (req, res) =>{
   var bestTime;
   var bestScore;
   var bestAccuracy;
-  var achievement1 = '';
-  var achievement2 = '';
-  var achievement3 = '';
-  var achievement4 = '';
   var email = req.session.user[0].email;
   var dateJoined = req.session.user[0].date_joined;
+  var achievements = [];
 
   const qGetUserInfo = `SELECT * FROM users WHERE username = '${valUsername}';`;
   const qQuizzesTaken = `SELECT COUNT(username) FROM user_to_game WHERE username = '${valUsername}';`;
@@ -252,12 +254,10 @@ app.get('/userProfile', (req, res) =>{
           bestTime : '-', 
           bestScore : 0, 
           bestAccuracy : 0, 
-          achievement1 : achievement1, 
-          achievement2 : achievement2, 
-          achievement3 : achievement3, 
-          achievement4 : achievement4,
+          achievements,
           dateJoined : dateJoined,
           username: valUsername,
+          user: user,
           email: email,
           message: msg,
           error: msgerr
@@ -271,28 +271,28 @@ app.get('/userProfile', (req, res) =>{
         res.render('pages/profile', vals);
       }
       else{
-        if(quizzesTaken >= 10){achievement1 = "10-quizzes-taken";}
-        if(quizzesTaken >= 50){achievement1 = "50-quizzes-taken";}
-        if(quizzesTaken >= 100){achievement1 = "100-quizzes-taken";}
-        if(quizzesTaken >= 500){achievement1 = "500-quizzes-taken";}
+        if(quizzesTaken >= 10 && quizzesTaken <50){achievements.push("10 Quizzes Taken");}
+        else if(quizzesTaken >= 50 && quizzesTaken<100){achievements.push("50 Quizzes Taken");}
+        else if(quizzesTaken >= 100 && quizzesTaken<500){achievements.push("100 Quizzes Taken");}
+        else if(quizzesTaken >= 500){achievements.push("500 quizzes taken");}
 
         db.any(qPointsEarned)
         .then( data=>{
           pointsEarned = data[0].sum;
 
-          if(pointsEarned >= 50){achievement2 = "50-points-earned";}
-          if(pointsEarned >= 100){achievement2 = "100-points-earned";}
-          if(pointsEarned >= 500){achievement2 = "500-points-earned";}
-          if(pointsEarned >= 1000){achievement2 = "1000-points-earned";}
+          if(pointsEarned >= 50){achievements.push("50 Points Earned");}
+          else if(pointsEarned >= 100){achievements.push("100 Points Earned");}
+          else if(pointsEarned >= 500){achievements.push("500 Points Earned");}
+          else if(pointsEarned >= 1000){achievements.push("1000 Points Earned");}
 
           db.any(qTotTime)
           .then( data=>{
             totTime = data[0].sum;
 
-            if(totTime >= 3600){achievement3 = "1-hour-played";}
-            if(totTime >= 18000){achievement3 = "5-hours-played";}
-            if(totTime >= 36000){achievement3 = "10-hours-played";}
-            if(totTime >= 86400){achievement3 = "1-day-played";}
+            if(totTime >= 3600){achievements.push("1 Hour Played");}
+            if(totTime >= 18000){achievements.push("5 Hours Played");}
+            if(totTime >= 36000){achievements.push( "10 Hours Played");}
+            if(totTime >= 86400){achievements.push("1 Day Played");}
 
             db.any(qBestTime)
             .then( data=>{
@@ -303,14 +303,14 @@ app.get('/userProfile', (req, res) =>{
               .then( data=>{
                 bestScore = data[0].score;
 
-                if(bestScore >= 10){achievement4 = "10-best-score";}
-                if(bestScore >= 15){achievement4 = "15-best-score";}
-                if(bestScore >= 20){achievement4 = "20-best-score";}
+                if(bestScore >= 500){achievements.push("500 Best Score");}
+                if(bestScore >= 700){achievements.push( "700 Best Score");}
+                if(bestScore >= 900){achievements.push("900 Best Score");}
 
                 db.any(qBestAccuracy)
                 .then( data=>{
                   bestAccuracy = data[0].num_correct;
-                  
+                  console.log("achievements: ", achievements);
                   var vals = {
                     quizzesTaken : quizzesTaken,
                     pointsEarned :pointsEarned, 
@@ -318,10 +318,7 @@ app.get('/userProfile', (req, res) =>{
                     bestTime : bestTime, 
                     bestScore : bestScore, 
                     bestAccuracy : bestAccuracy, 
-                    achievement1 : achievement1, 
-                    achievement2 : achievement2, 
-                    achievement3 : achievement3, 
-                    achievement4 : achievement4,
+                    achievements,
                     dateJoined : dateJoined,
                     username: valUsername,
                     email: email,
@@ -373,7 +370,7 @@ app.post("/submitQuiz", async (req, res) => {
   var valDiff = req.body.difficulty;
   var valCategory = req.body.category;
   var valUsername = req.session.user.username;
-  var valScore = (valNum_correct * 50) - (valTime * 10);
+  var valScore = Math.max((valNum_correct * 100) - (valTime * 5), 0);
   var gameVals = [valTime, valDiff, valCategory, valNum_correct, valScore];
 
   var insertGameQuery = `INSERT INTO games (time_taken, difficulty, category, num_correct, score) VALUES ($1, $2, $3, $4, $5) returning game_id;`;
@@ -390,6 +387,27 @@ app.post("/submitQuiz", async (req, res) => {
   .catch(err => {
       console.log(`${err}`);
   });
+});
+
+app.post('/update-pic', function(req, res) {
+  const avatar = req.body.avatarOption;
+  var valUser = req.session.user[0].username;
+  console.log(req.body.avatarOption);
+  console.log(req.session.user[0].username);
+
+  var avatarQuery = `UPDATE users SET avatar_picture = '${avatar}' WHERE username = '${valUser}';`
+
+  db.any(avatarQuery)
+    .then(async data => {
+      var user = req.session.user[0];
+      user.avatar_picture = avatar;
+      console.log('Data received from the API:', data); // log the data to the console
+      res.redirect('/userProfile');
+    })
+    .catch(error => { // if an error occurred
+      console.log(error);   // log the error to the console
+      res.send('An error occurred when changing profile picture');  // send a response to the client
+    });
 });
 
 app.post("/updateProfile", async (req, res) => {
@@ -409,15 +427,23 @@ app.post("/updateProfile", async (req, res) => {
       }
       else{
         const qUpdateUsername = `UPDATE users SET username = '${req.body.newUsername}' WHERE username = '${valUsername}' RETURNING *;`;
-        db.any(qUpdateUsername)
+        const qUpdateUTGUsername = `UPDATE user_to_game SET username = '${req.body.newUsername}' WHERE username = '${valUsername}'`
+        db.any(qUpdateUTGUsername)
         .then(data=>{
-          req.session.user = data;
-          req.session.save();
-          res.redirect('/userProfile');
+          db.any(qUpdateUsername)
+          .then(data=>{
+            req.session.user = data;
+            req.session.save();
+            res.redirect('/userProfile');
+          })
+          .catch(err => {
+            console.log(`${err}`);
+          });
         })
         .catch(err => {
           console.log(`${err}`);
         });
+          
       }
 
     })
@@ -434,7 +460,8 @@ app.post("/updateProfile", async (req, res) => {
     
     else{
       const hash = await bcrypt.hash(req.body.newPassword, 10);
-      const qUpdatePassword = `UPDATE users SET password = '${hash}' WHERE username = '${valUsername}' RETURNING *;`;
+     // const qUpdatePassword = `UPDATE users SET password = '${hash}' WHERE username = '${valUsername}' RETURNING *;`;
+     const qUpdatePassword = `UPDATE users SET password = '${hash}' WHERE username = '${valUsername}' RETURNING *;`;
       db.any(qUpdatePassword)
       .then(data=>{
         req.session.user = data;
@@ -464,8 +491,8 @@ app.post("/updateProfile", async (req, res) => {
 
 });
 
-// // Authentication Required
-// app.use(auth);
+// Authentication Required
+app.use(auth);
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->
