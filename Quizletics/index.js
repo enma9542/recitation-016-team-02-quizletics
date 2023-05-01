@@ -89,11 +89,6 @@ app.get('/quiz', (req, res) => {
     });
 });
 
-
-
-
-
-
 app.get('/', (req, res) => {
   res.render('pages/home')
 });
@@ -148,8 +143,8 @@ app.post('/register', async (req, res) => {
 
   // To-DO: Insert username and hashed password into 'users' table
   const searchQuery = "SELECT * FROM users where username = $1;";
-  const insertQuery = "INSERT INTO users (username, password, email, date_joined) VALUES ($1, $2, $3, $4) returning *;"
-  const values = [req.body.username, hash, req.body.email, currentDate];
+  const insertQuery = "INSERT INTO users (username, password, email, avatar_picture, date_joined) VALUES ($1, $2, $3, $4, $5) returning *;"
+  const values = [req.body.username, hash, req.body.email, '/icons-img/logo.svg', currentDate];
 
   db.any(searchQuery, [req.body.username])
   .then(data => {
@@ -192,6 +187,7 @@ const auth = (req, res, next) => {
 };
 
 app.get('/userProfile', (req, res) =>{
+  res.setHeader('Cache-Control', 'no-cache');
   if(!req.session.user){
     res.render("pages/login", {message: 'Must Be Logged In to View Profile Page', error: true});
   }
@@ -237,6 +233,7 @@ app.get('/userProfile', (req, res) =>{
           achievement4 : achievement4,
           dateJoined : dateJoined,
           username: valUsername,
+          user: user,
           email: email,
           message: msg,
           error: msgerr
@@ -369,6 +366,27 @@ app.post("/submitQuiz", async (req, res) => {
   .catch(err => {
       console.log(`${err}`);
   });
+});
+
+app.post('/update-pic', function(req, res) {
+  const avatar = req.body.avatarOption;
+  var valUser = req.session.user[0].username;
+  console.log(req.body.avatarOption);
+  console.log(req.session.user[0].username);
+
+  var avatarQuery = `UPDATE users SET avatar_picture = '${avatar}' WHERE username = '${valUser}';`
+
+  db.any(avatarQuery)
+    .then(async data => {
+      var user = req.session.user[0];
+      user.avatar_picture = avatar;
+      console.log('Data received from the API:', data); // log the data to the console
+      res.redirect('/userProfile');
+    })
+    .catch(error => { // if an error occurred
+      console.log(error);   // log the error to the console
+      res.send('An error occurred when changing profile picture');  // send a response to the client
+    });
 });
 
 app.post("/updateProfile", async (req, res) => {
