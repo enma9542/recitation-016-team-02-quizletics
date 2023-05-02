@@ -343,7 +343,8 @@ app.post("/submitQuiz", async (req, res) => {
   var valDiff = req.body.difficulty;
   var valCategory = req.body.category;
   var valUsername = req.session.user.username;
-  var valScore = (valNum_correct * 50) - (valTime * 10);
+  var valScore = (valNum_correct * 100) - (valTime * 5);
+  // ENRIQUE UPDATED THIS, use his version
   var gameVals = [valTime, valDiff, valCategory, valNum_correct, valScore];
 
   var insertGameQuery = `INSERT INTO games (time_taken, difficulty, category, num_correct, score) VALUES ($1, $2, $3, $4, $5) returning game_id;`;
