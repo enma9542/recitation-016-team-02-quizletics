@@ -1,0 +1,31 @@
+<%- include ('../partials/header') %>
+<%- include ('../partials/menu') %>
+<%- include ('../partials/message', {message: locals.message, error: locals.error}) %>
+
+<main>
+    <div class="container">
+        <h1>Leaderboard</h1>
+        <% if (leaderboard.length > 0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Total Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% leaderboard.forEach(entry => { %>
+                        <tr>
+                            <td><%= entry.username %></td>
+                            <td><%= entry.total_points %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>No entries found.</p>
+        <% } %>
+    </div>
+</main>
+
+<%- include ('../partials/footer') %>

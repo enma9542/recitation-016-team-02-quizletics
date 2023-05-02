@@ -4,12 +4,72 @@
 
 <main>
     <div class="container">
-        <!-- THE REST OF YOUR HTML CODE GOES HERE -->
-        <div id="leaderboard">
+        <div class="leaderboard">
             <h1>Leaderboard</h1>
-        </div>>
-        <div id="featuredQuiz">
-            <h1>Featured Quiz</h1>
+            <% if (leaderboard.length > 0) { %>
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="RColumn">RANK #</th>
+                            <th class="PColumn">PLAYER</th>
+                            <th class="SColumn">SCORE</th>
+                        </tr>   
+                    </thead>
+                    <tbody>
+                        <% leaderboard.forEach((entry, index) => { %>
+                            <tr>
+                                <td class="RColumn"><%= index + 1 %></td>
+                                <td class="PColumn"><%= entry.username %></td>
+                                <td class="SColumn"><%= entry.total_points %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>No entries found.</p>
+            <% } %>
+        </div>
+        <div class="featuredQuiz">
+            <h2>Featured Quizzes</h2>
+            <a href="#" onclick="difficultySelected('Sport', 'medium')">
+                <div class="quiz-card">
+                    <h3>Sports</h3>
+                    <p>Medium</p>
+                </div>
+            </a>
+            <a href="#" onclick="difficultySelected('Food', 'hard')">
+                <div class="quiz-card">
+                    <h3>Food</h3>
+                    <p>Hard</p>
+                </div>
+            </a>
+            
+            <a href="#" onclick="difficultySelected('General', 'easy')">
+                <div class="quiz-card">
+                    <h3>General</h3>
+                    <p>Easy</p>
+                </div>
+            </a>
+            
+            <a href="#" onclick="difficultySelected('Science', 'easy')">
+                <div class="quiz-card">
+                    <h3>Science</h3>
+                    <p>Easy</p>
+                </div>
+            </a>
+            
+            <a href="#" onclick="difficultySelected('Art', 'medium')">
+                <div class="quiz-card">
+                    <h3>Art</h3>
+                    <p>Medium</p>
+                </div>
+            </a>
+            <a href="#" onclick="difficultySelected('Film', 'hard')">
+                <div class="quiz-card">
+                    <h3>Film</h3>
+                    <p>Hard</p>
+                </div>
+            </a>
         </div>
     </div>
 </main>
