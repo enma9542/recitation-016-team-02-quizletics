@@ -347,11 +347,11 @@ app.post("/submitQuiz", async (req, res) => {
   var gameVals = [valTime, valDiff, valCategory, valNum_correct, valScore];
 
   var insertGameQuery = `INSERT INTO games (time_taken, difficulty, category, num_correct, score) VALUES ($1, $2, $3, $4, $5) returning game_id;`;
-  var insertUTGQuery = `INSERT INTO user_to_game (username, game_id) VALUES;`;
+  var insertUTGQuery = `INSERT INTO user_to_game (username, game_id) VALUES ($1, $2);`;
 
   db.any(insertGameQuery, gameVals)
   .then( data=>{   
-      var utgVals = [valUsername, data];
+      var utgVals = [valUsername, data[0].game_id];
       db.any(insertUTGQuery, utgVals)
       .catch(err => {
         console.log(`${err}`);
