@@ -52,3 +52,22 @@ Meeting 3: 04/24/2023
     - Finish up dropdown functionlaity on site (Will)
     - Wrap up quiz page and corresponding functionlaity with the APIs (Enrique and Andrew)
     - Clean up some frontend design (Andrew)
+
+Meeting 4: 05/01/2023
+- What we've done...
+    - Completed Profile Page
+    - Created and almost completed powerpoint
+    - Begun project report
+    - Finished leaderboard
+    - Finished dropdown functionality
+    - Completed quiz page functionality, minus submission and stat updates
+- Challenges we faced...
+    - Currently having issues with register ejs no longer working
+    - Some styling is also not working anymore
+- To Dos for next week...
+    - Wrap up powerpoint presentation
+    - Finish project report
+    - Debug all site issues
+    - Complete features quizzes section on home page
+    - Complete quiz stat database update APIs
+    - Practice for presentation on Wednesday

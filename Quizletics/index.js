@@ -92,8 +92,34 @@ app.get('/quiz', (req, res) => {
     });
 });
 
+
+// HOME DEFAULT
 app.get('/', (req, res) => {
-  res.render('pages/home')
+  db.any('SELECT username, total_points FROM leaderboard ORDER BY total_points DESC LIMIT 10')
+    .then(rows => {
+      res.render('pages/home', { leaderboard: rows });
+    })
+    .catch(error => {
+      console.error(error);
+      res.render('pages/error');
+    });
+});
+
+// HOME /HOME
+app.get('/home', (req, res) => {
+  res.redirect('/')
+});
+
+// LEADERBOARD page. DEV purposes
+app.get('/leaderboard', (req, res) => {
+  db.any('SELECT username, total_points FROM leaderboard ORDER BY total_points DESC LIMIT 100')
+    .then(rows => {
+      res.render('pages/leaderboard', { leaderboard: rows });
+    })
+    .catch(error => {
+      console.error(error);
+      res.render('pages/error');
+    });
 });
 
 //Test API
@@ -194,6 +220,7 @@ app.get('/userProfile', (req, res) =>{
   if(!req.session.user){
     res.render("pages/login", {message: 'Must Be Logged In to View Profile Page', error: true});
   }
+
   var user = req.session.user[0];
   var valUsername = req.session.user[0].username;
   var quizzesTaken;
@@ -464,8 +491,8 @@ app.post("/updateProfile", async (req, res) => {
 
 });
 
-// // Authentication Required
- app.use(auth);
+// Authentication Required
+app.use(auth);
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->
