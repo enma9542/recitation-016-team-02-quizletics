@@ -215,7 +215,7 @@ const auth = (req, res, next) => {
     next();
 };
 
-app.get('/userProfile', (req, res) =>{
+app.get('/userProfile2', (req, res) =>{
   res.setHeader('Cache-Control', 'no-cache');
   if(!req.session.user){
     res.render("pages/login", {message: 'Must Be Logged In to View Profile Page', error: true});
@@ -364,32 +364,53 @@ app.get('/userProfile', (req, res) =>{
 });
 
 app.post("/submitQuiz", async (req, res) => {
+  console.log("submitQuiz route called");
   var valUsername = req.session.user[0].username;
   var valNum_correct = req.body.num_correct;
   var valTime = req.body.time_taken;
   var valDiff = req.body.difficulty;
   var valCategory = req.body.category;
-  var valUsername = req.session.user.username;
-  var valScore = Math.max((valNum_correct * 100) - (valTime * 5), 0);
+  function difficultyStringToNumber(difficulty) {
+    switch (difficulty) {
+      case 'easy':
+        return 1;
+      case 'medium':
+        return 2;
+      case 'hard':
+        return 3;
+      default:
+        return 1;
+    }
+  }
+  const baseScore = (valNum_correct / 15) * 100;
+  const timeBonus = Math.max(100 - (valTime / 180) * 100, 0);
+  const difficultyBonus = difficultyStringToNumber(valDiff) * 10;
+  var valScore = Math.round(baseScore + timeBonus + difficultyBonus);
   var gameVals = [valTime, valDiff, valCategory, valNum_correct, valScore];
 
   var insertGameQuery = `INSERT INTO games (time_taken, difficulty, category, num_correct, score) VALUES ($1, $2, $3, $4, $5) returning game_id;`;
-  var insertUTGQuery = `INSERT INTO user_to_game (username, game_id) VALUES;`;
+  var insertUTGQuery = `INSERT INTO user_to_game (username, game_id) VALUES ($1, $2);`;
 
   db.any(insertGameQuery, gameVals)
-  .then( data=>{   
-      var utgVals = [valUsername, data];
+  .then( data=>{
+      console.log('game_id: base:', data);
+      var utgVals = [valUsername, data[0].game_id];
       db.any(insertUTGQuery, utgVals)
+      .then(() => {
+        res.json({ status: 'success', message: 'Quiz results submitted successfully' });
+      })
       .catch(err => {
         console.log(`${err}`);
+        res.status(500).json({ status: 'error', message: 'Failed to submit quiz results' });
       });
   })
   .catch(err => {
       console.log(`${err}`);
+      res.status(500).json({ status: 'error', message: 'Failed to submit quiz results' });
   });
 });
 
-app.post('/update-pic', function(req, res) {
+app.post('/userProfile', function(req, res) {
   const avatar = req.body.avatarOption;
   var valUser = req.session.user[0].username;
   console.log(req.body.avatarOption);
@@ -402,7 +423,7 @@ app.post('/update-pic', function(req, res) {
       var user = req.session.user[0];
       user.avatar_picture = avatar;
       console.log('Data received from the API:', data); // log the data to the console
-      res.redirect('/userProfile');
+      res.redirect('/userProfile2');
     })
     .catch(error => { // if an error occurred
       console.log(error);   // log the error to the console
@@ -416,7 +437,7 @@ app.post("/updateProfile", async (req, res) => {
   console.log(valUsername);
   if(req.body.newUsername){
     const qFindUsername = `SELECT * FROM users WHERE username = '${req.body.newUsername}';`;
-   
+  
     db.any(qFindUsername)
     .then(data=>{
       if(data && (data.length > 0)){

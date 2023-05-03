@@ -153,44 +153,75 @@
 
 
   <script>
-    const apiData = <%- JSON.stringify(locals.data) %>;
-let currentQuestionIndex = 0;
-let numCorrect = 0;
-let startTime = 0;
-let timeElapsed = 0;
-let timerInterval;
+  const apiData = <%- JSON.stringify(locals.data) %>;
+  let currentQuestionIndex = 0;
+  let numCorrect = 0;
+  let startTime = 0;
+  let timeElapsed = 0;
+  let timerInterval;
+  let isNewQuiz = true;
 
-function startTimer() {
-  startTime = Date.now();
-  timerInterval = setInterval(updateTimer, 1000);
+
+  function startTimer() {
+    startTime = Date.now();
+    timerInterval = setInterval(updateTimer, 1000);
+  }
+  
+  function updateTimer() {
+    timeElapsed = Math.floor((Date.now() - startTime) / 1000);
+    const minutes = Math.floor(timeElapsed / 60);
+    const seconds = timeElapsed % 60;
+    document.getElementById('timer').innerText = (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+  }
+
+function difficultyStringToNumber(difficulty) {
+  switch (difficulty) {
+    case 'easy':
+      return 1;
+    case 'medium':
+      return 2;
+    case 'hard':
+      return 3;
+    default:
+      return 0;
+  }
 }
 
-function updateTimer() {
-  timeElapsed = Math.floor((Date.now() - startTime) / 1000);
-  const minutes = Math.floor(timeElapsed / 60);
-  const seconds = timeElapsed % 60;
-  document.getElementById('timer').innerText = (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+function calculateScore(numCorrect, numIncorrect, timeElapsed, difficulty) {
+  if (numCorrect === 0) {
+    return 0;
+  }
+  const baseScore = numCorrect * 50;
+  const incorrectPenalty = numIncorrect * 20; // subtract 20 points for each incorrect answer
+  const difficultyMultiplier = difficultyStringToNumber(difficulty) * 0.5;
+  const timeBonus = Math.max(180 - timeElapsed, 0) * 0.1;
+  const score = Math.round((baseScore + timeBonus + difficultyMultiplier - incorrectPenalty) * 10); // subtract the penalty from the final score
+  return score;
 }
 
-function calculateScore(numCorrect, timeElapsed) {
-  const score = (numCorrect * 100) - (timeElapsed * 5);
-  return Math.max(score, 0);
-}
-
-function updateScoreDisplay() {
-  const score = calculateScore(numCorrect, timeElapsed);
+function updateScoreDisplay(numCorrect, numIncorrect, timeElapsed, difficulty) {
+  const score = calculateScore(numCorrect, numIncorrect, timeElapsed, difficulty);
   document.getElementById('score').innerText = `${score}`;
 }
 
+
+
+// START QUIZ BUTTON
 document.getElementById('start-quiz-btn').addEventListener('click', () => {
+  currentQuestionIndex = 0;
+  numCorrect = 0;
+  numIncorrect = 0;
+  timeElapsed = 0;
   document.getElementById('start-quiz-container').style.display = 'none';
   document.getElementById('quiz-container').style.display = 'block';
   displayQuestion(apiData, currentQuestionIndex);
   startTimer();
 });
 
+
+
 document.getElementById('go-back-btn').addEventListener('click', () => {
-  window.location.href = '/';
+  window.location.href = '/home';
 });
 
 let isAnswerBlocked = false;
@@ -258,14 +289,18 @@ document.addEventListener('click', (event) => {
       answerMsg.innerText = 'Correct!';
       answerMsg.classList.add('correct');
       answerDiv.appendChild(answerMsg);
-      updateScoreDisplay();
+      const difficulty = apiData[0].difficulty;
+      updateScoreDisplay(numCorrect, numIncorrect, timeElapsed, difficulty);
     } else {
+      numIncorrect++;
       button.style.borderColor = 'red';
       answerMsg.innerText = 'Incorrect!';
       answerMsg.classList.add('incorrect');
       answerDiv.appendChild(answerMsg);
-      updateScoreDisplay();
+      const difficulty = apiData[0].difficulty;
+      updateScoreDisplay(numCorrect, numIncorrect, timeElapsed, difficulty);
     }
+    
 
     // Disable all answer buttons for the current question
     const allAnswerButtons = document.querySelectorAll('.answer-btn[data-question="' + questionIndex + '"]');
@@ -279,8 +314,10 @@ document.addEventListener('click', (event) => {
         const quizContainer = document.getElementById('quiz-container');
         quizContainer.classList.add('fade-out');
         setTimeout(() => {
+          unblockAnswers();
           currentQuestionIndex++;
           displayQuestion(apiData, currentQuestionIndex);
+          saveQuizState();
         }, 1000);
       }, 2000);
     } else {
@@ -299,7 +336,9 @@ document.addEventListener('click', (event) => {
 });
 
 
+
 function displayResults() {
+  const difficulty = apiData[0].difficulty;
   const score = calculateScore(numCorrect, timeElapsed);
   const quizContainer = document.getElementById('quiz-container');
   quizContainer.innerHTML = `
@@ -307,13 +346,35 @@ function displayResults() {
     <p>Score: ${score}</p>
     <p>Number of correct answers: ${numCorrect}</p>
     <p>Time taken: ${timeElapsed} seconds</p>
-    <button id="go-back-btn">Go Back</button>
+    <button id="check-stats-btn">Check Stats</button>
   `;
+  submitQuizResults(score, numCorrect, timeElapsed, apiData[0].difficulty, apiData[0].category);
 }
 
+async function submitQuizResults(score, numCorrect, timeElapsed, difficulty, category) {
+  try {
+    const response = await fetch('/submitQuiz', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        score: score,
+        num_correct: numCorrect,
+        time_taken: timeElapsed,
+        difficulty: difficultyStringToNumber(difficulty),
+        category: category,
+      }),
+    });
 
-
-    
-<<<<<<<<< Temporary merge branch 1
-  </script>
+    if (response.ok) {
+      console.log('Quiz results submitted successfully');
+    } else {
+      console.log('Failed to submit quiz results');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+</script>
   
