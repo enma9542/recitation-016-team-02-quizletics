@@ -18,6 +18,7 @@ nav{
             padding-left: 1rem;
         }
         h1{
+            color: $whiteText;
             padding-left: 1rem;
             font-size: 3rem;
         }
@@ -32,6 +33,7 @@ nav{
         li{
             position: relative;
             a{
+                text-decoration: none!important;
                 font-weight: 200;
                 font-size: 2rem;
                 color: $whiteText;
@@ -40,6 +42,9 @@ nav{
                     color: $whiteText;
                     border-bottom: 1px solid $whiteText;
                 }
+            }
+            a:link{
+                text-decoration: none!important;
             }
             li:hover>a {
                 background-color: #ffe0b2;
@@ -148,7 +153,7 @@ main{
         transition: background 0.4s ease-in-out;
     }
     button:hover{
-        background: #4fa1db;
+        background: #e2390e;
     }
     }
 
@@ -171,3 +176,7 @@ input{
     width: 20%;
     z-index: -1;
 }
+a:link { text-decoration: none; }
+a:visited { text-decoration: none; }
+a:hover { text-decoration: none; }
+a:active { text-decoration: none; }

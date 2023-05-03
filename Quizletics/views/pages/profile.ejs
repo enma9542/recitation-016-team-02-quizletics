@@ -15,14 +15,34 @@
                 <div class="row">
                     <div class="col-sm">
                       <div class="awardbox">
-                        <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p> <%= achievement1 %></p>
+                        <%
+                          if(achievements[0]){
+                            if(achievements[0].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[0].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[0].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[0].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
+                            %>
+                        
+                        <p> <%= achievements[0] %></p>
+                        <%
+                          }
+                        %>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="awardbox">
-                        <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p><%= achievement2 %></p>
+                        <%
+                          if(achievements[1]){
+                            if(achievements[1].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[1].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[1].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[1].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
+                            %>
+                        
+                        <p> <%= achievements[1] %></p>
+                        <%
+                          }
+                        %>
                       </div>
                     </div>
                   </div>
@@ -30,14 +50,34 @@
                   <div class="row">
                     <div class="col-sm">
                       <div class="awardbox">
-                        <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p><%= achievement3 %></p>
+                        <%
+                          if(achievements[2]){
+                            if(achievements[2].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[2].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[2].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[2].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
+                            %>
+                        
+                        <p> <%= achievements[2] %></p>
+                        <%
+                          }
+                        %>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="awardbox">
-                        <img src="https://placehold.jp/100x100.png" alt="Award Image">
-                        <p><%= achievement4 %></p>
+                        <%
+                          if(achievements[3]){
+                            if(achievements[3].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[3].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[3].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
+                            else if(achievements[3].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
+                            %>
+                        
+                        <p> <%= achievements[3] %></p>
+                        <%
+                          }
+                        %>
                       </div>
                     </div>
                   </div>
@@ -61,7 +101,7 @@
     <div class="profile-card">
         <div class="user-info"> <!-- Profile Image + Name-->
             <button type="button" data-bs-toggle="modal" data-bs-target="#updatePhotoModal">
-                <img src="https://placehold.jp/150x150.png" alt="Profile Image" data-toggle="tooltip" data-placement="top" title="Update Photo" >
+                <img src="<%= user.avatar_picture %>" alt="Profile Image" data-toggle="tooltip" data-placement="top" title="Update Photo" >
             </button>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePhotoModal">
                 Update Photo
@@ -79,15 +119,31 @@
                     </div>
                     <div class="modal-body">
                         <form>
-                          <label for="avatar">Upload a picture: </label>
-
-                          <input type="file"
-                                 id="avatar" name="avatar"
-                                 accept="image/png, image/jpeg">
-                            <div class="submission-buttons">
-                              <button type="button" class="btn btn-primary">Save changes</button>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <label for="avatar">Pick an Avatar: </label>
+                          <div class="choice-container">
+                            <div class="row">
+                              <div class="col">
+                                <a href="" class="profileSelection" onclick="sendOption('/icons-img/logo.svg')">
+                                  <img src="/icons-img/logo.svg" alt="Picture1">
+                                </a>
+                              </div>
+                              <div class="col">
+                                <a href="" class="profileSelection" onclick="sendOption('/icons-img/football.svg')">
+                                  <img src="/icons-img/football.svg" alt="Picture2">
+                                </a>
+                              </div>
+                              <div class="col">
+                                <a href="" class="profileSelection" onclick="sendOption('/icons-img/camera.svg')">
+                                  <img src="/icons-img/camera.svg" alt="Picture3">
+                                </a>
+                              </div>
+                              <div class="col">
+                                <a href="" class="profileSelection" onclick="sendOption('/icons-img/science.svg')">
+                                  <img src="/icons-img/science.svg" alt="Picture4">
+                                </a>
+                              </div> 
                             </div>
+                          </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -133,14 +189,14 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                      <form>
+                      <form action="/updateProfile" method="post" class="update-username-form">
                           <!-- LOCATION -->
                           <div class="mb-3">
-                            <label for="new-username" class="form-label">New Username</label>
-                            <input type="text" class="form-control" id="new-username">
+                            <label for="newUsername" class="form-label">New Username</label>
+                            <input type="text" class="form-control" id="newUsername" name="newUsername">
                           </div>
                           <div class="submission-buttons">
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                           </div>
                       </form>
@@ -162,22 +218,22 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="/updateProfile" method="post" class="update-password-form">
                         <!-- LOCATION -->
                         <div class="mb-3">
                           <label for="current-password" class="form-label">Current Password</label>
-                          <input type="text" class="form-control" id="current-password">
+                          <input type="text" class="form-control" id="current-password" name="currentPassword">
                         </div>
                         <div class="mb-3">
-                          <label for="new-password" class="form-label">New Password</label>
-                          <input type="text" class="form-control" id="new-password">
+                          <label for="newPassword" class="form-label">New Password</label>
+                          <input type="text" class="form-control" id="newPassword" name="newPassword">
                         </div>
                         <div class="mb-3">
-                          <label for="confirm-new-password" class="form-label">Confirm New Password</label>
-                          <input type="text" class="form-control" id="confirm-new-password">
+                          <label for="newPasswordConfirm" class="form-label">Confirm New Password</label>
+                          <input type="text" class="form-control" id="newPasswordConfirm" name="newPasswordConfirm">
                         </div>
                         <div class="submission-buttons">
-                          <button type="button" class="btn btn-primary">Save changes</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -198,13 +254,13 @@
                 </button>
               </div>
               <div class="modal-body">
-                  <form>
+                  <form action="/updateProfile" method="post" class="update-email-form">
                     <div class="mb-3">
                       <label for="email" class="form-label">New Email</label>
-                      <input type="text" class="form-control" id="email">
+                      <input type="text" class="form-control" id="newEmail" name="newEmail">
                     </div>
                       <div class="submission-buttons">
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                       </div>
                   </form>
@@ -278,6 +334,25 @@
         </div>
     </div>
 </main>
+
+<script>
+
+function sendOption(option) {
+  fetch('/update-pic', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ avatarOption: option })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+    // do something with the response data
+  })
+  .catch(error => console.error(error));
+}
+</script>
 
 <%- include ('../partials/footer') %>
 

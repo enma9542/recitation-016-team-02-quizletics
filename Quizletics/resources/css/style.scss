@@ -46,7 +46,7 @@ $text: 2.5rem;
 
 $whiteText: #f5f5f5;
 $greyText: #ababab;
- $blackBackground: #0c0c0c;
+$blackBackground: #0c0c0c;
 
 
 
@@ -65,8 +65,8 @@ $greyText: #ababab;
 @import "home";
 @import "login";
 @import "register";
-@import "quizList";
-@import "category-bar";
+// @import "quizList";
+// @import "category-bar";
 @import "profile";
 
 
