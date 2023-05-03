@@ -159,8 +159,6 @@
   let startTime = 0;
   let timeElapsed = 0;
   let timerInterval;
-  let isNewQuiz = true;
-
 
   function startTimer() {
     startTime = Date.now();
@@ -188,14 +186,11 @@ function difficultyStringToNumber(difficulty) {
 }
 
 function calculateScore(numCorrect, numIncorrect, timeElapsed, difficulty) {
-  if (numCorrect === 0) {
-    return 0;
-  }
   const baseScore = numCorrect * 50;
-  const incorrectPenalty = numIncorrect * 20; // subtract 20 points for each incorrect answer
+  const incorrectPenalty = numIncorrect * 20;
   const difficultyMultiplier = difficultyStringToNumber(difficulty) * 0.5;
   const timeBonus = Math.max(180 - timeElapsed, 0) * 0.1;
-  const score = Math.round((baseScore + timeBonus + difficultyMultiplier - incorrectPenalty) * 10); // subtract the penalty from the final score
+  const score = Math.max(Math.round((baseScore + timeBonus + difficultyMultiplier - incorrectPenalty) * 10), 0); // Use Math.max to ensure the score never drops below 0
   return score;
 }
 
@@ -317,7 +312,6 @@ document.addEventListener('click', (event) => {
           unblockAnswers();
           currentQuestionIndex++;
           displayQuestion(apiData, currentQuestionIndex);
-          saveQuizState();
         }, 1000);
       }, 2000);
     } else {
@@ -339,14 +333,14 @@ document.addEventListener('click', (event) => {
 
 function displayResults() {
   const difficulty = apiData[0].difficulty;
-  const score = calculateScore(numCorrect, timeElapsed);
+  const score = calculateScore(numCorrect, numIncorrect, timeElapsed, apiData[0].difficulty);
+  updateScoreDisplay(numCorrect, numIncorrect, timeElapsed, difficulty); // Update the score display with the required arguments
   const quizContainer = document.getElementById('quiz-container');
   quizContainer.innerHTML = `
     <h2>Quiz Completed!</h2>
     <p>Score: ${score}</p>
     <p>Number of correct answers: ${numCorrect}</p>
     <p>Time taken: ${timeElapsed} seconds</p>
-    <button id="check-stats-btn">Check Stats</button>
   `;
   submitQuizResults(score, numCorrect, timeElapsed, apiData[0].difficulty, apiData[0].category);
 }

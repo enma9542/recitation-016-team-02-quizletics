@@ -71,9 +71,9 @@ app.use(
 
 //API Routes Go Here
 //quiz page
-app.get('/quiz', (req, res) => { 
-  if(!req.session.user){
-    res.render("pages/login", {message: 'Must Be Logged In to Take Quiz', error: true});
+app.get('/quiz', (req, res) => {
+  if (!req.session.user) {
+    res.render("pages/login", { message: 'Must Be Logged In to Take Quiz', error: true });
   }
   const category = req.query.category; // get the category from the query string
   const difficulty = req.query.difficulty; // get the difficulty from the query string
@@ -81,16 +81,16 @@ app.get('/quiz', (req, res) => {
   axios.get(`https://the-trivia-api.com/v2/questions?limit=15&categories=${category}&difficulties=${difficulty}`) // make a GET request to the trivia API
     .then(response => {
       const data = response.data; // get the data from the response
-      res.render('pages/quiz', { data: data, score: req.session.score, req: req });  // render the quiz page and pass the data to it
       req.session.score = undefined; // reset the score
       console.log('Data received from the API:', data); // log the data to the console
-      res.render('pages/quiz', { data: data }); // render the quiz page and pass the data to it
+      res.render('pages/quiz', { data: data, score: req.session.score, req: req });  // render the quiz page and pass the data to it
     })
     .catch(error => { // if an error occurred
       console.log(error);   // log the error to the console
       res.send('An error occurred connecting to trivia api');  // send a response to the client
     });
 });
+
 
 
 // HOME DEFAULT
@@ -215,7 +215,7 @@ const auth = (req, res, next) => {
     next();
 };
 
-app.get('/userProfile2', (req, res) =>{
+app.get('/userProfile', (req, res) =>{
   res.setHeader('Cache-Control', 'no-cache');
   if(!req.session.user){
     res.render("pages/login", {message: 'Must Be Logged In to View Profile Page', error: true});
@@ -233,6 +233,24 @@ app.get('/userProfile2', (req, res) =>{
   var dateJoined = req.session.user[0].date_joined;
   var achievements = [];
 
+
+  // Define a default vals object
+  var vals = {
+    quizzesTaken: 0,
+    pointsEarned: 0,
+    totTime: 0,
+    bestTime: '-',
+    bestScore: 0,
+    bestAccuracy: 0,
+    achievements: [],
+    dateJoined: dateJoined,
+    username: valUsername,
+    user: user,
+    email: email,
+    message: msg,
+    error: msgerr
+  };
+
   const qGetUserInfo = `SELECT * FROM users WHERE username = '${valUsername}';`;
   const qQuizzesTaken = `SELECT COUNT(username) FROM user_to_game WHERE username = '${valUsername}';`;
   const qPointsEarned = `SELECT SUM(score)  FROM games INNER JOIN user_to_game  ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}';`;
@@ -247,47 +265,51 @@ app.get('/userProfile2', (req, res) =>{
       quizzesTaken = data[0].count;
 
       if(quizzesTaken==='0'){
-        const vals = {
-          quizzesTaken : 0,
-          pointsEarned :0, 
-          totTime : 0, 
-          bestTime : '-', 
-          bestScore : 0, 
-          bestAccuracy : 0, 
-          achievements,
-          dateJoined : dateJoined,
-          username: valUsername,
-          user: user,
-          email: email,
-          message: msg,
-          error: msgerr
-        };
-        msg = '';
-        msgerr = false;
-        console.log("email: ",vals.email);
-        console.log("dateJoined: ",vals.dateJoined);
-        console.log("username: ",vals.username);
-        console.log("vals: ",vals);
-        res.render('pages/profile', vals);
+        if (quizzesTaken === '0') {
+          vals.quizzesTaken = 0;
+          vals.pointsEarned = 0;
+          vals.totTime = 0;
+          vals.bestTime = '-';
+          vals.bestScore = 0;
+          vals.bestAccuracy = 0;
+          vals.achievements = achievements.slice();;
+          vals.dateJoined = dateJoined;
+          vals.username = valUsername;
+          vals.user = user;
+          vals.email = email;
+          vals.message = msg;
+          vals.error = msgerr;
+          msg = '';
+          msgerr = false;
+          console.log("email: ", vals.email);
+          console.log("dateJoined: ", vals.dateJoined);
+          console.log("username: ", vals.username);
+          console.log("vals: ", {vals: vals});
+          res.render('pages/profile', {vals: vals});
       }
+    }
       else{
         if(quizzesTaken >= 10 && quizzesTaken <50){achievements.push("10 Quizzes Taken");}
-        else if(quizzesTaken >= 50 && quizzesTaken<100){achievements.push("50 Quizzes Taken");}
-        else if(quizzesTaken >= 100 && quizzesTaken<500){achievements.push("100 Quizzes Taken");}
-        else if(quizzesTaken >= 500){achievements.push("500 quizzes taken");}
+        if(quizzesTaken >= 50 && quizzesTaken<100){achievements.push("50 Quizzes Taken");}
+        if(quizzesTaken >= 100 && quizzesTaken<500){achievements.push("100 Quizzes Taken");}
+        if(quizzesTaken >= 500){achievements.push("500 quizzes taken");}
 
         db.any(qPointsEarned)
         .then( data=>{
           pointsEarned = data[0].sum;
 
-          if(pointsEarned >= 50){achievements.push("50 Points Earned");}
-          else if(pointsEarned >= 100){achievements.push("100 Points Earned");}
-          else if(pointsEarned >= 500){achievements.push("500 Points Earned");}
-          else if(pointsEarned >= 1000){achievements.push("1000 Points Earned");}
+          vals.pointsEarned = pointsEarned;
+
+          if(pointsEarned >= 500){achievements.push("500 Points Earned");}
+          if(pointsEarned >= 1000){achievements.push("1000 Points Earned");}
+          if(pointsEarned >= 50000){achievements.push("50000 Points Earned");}
+          if(pointsEarned >= 100000){achievements.push("100000 Points Earned");}
 
           db.any(qTotTime)
           .then( data=>{
             totTime = data[0].sum;
+
+            vals.totTime = totTime;
 
             if(totTime >= 3600){achievements.push("1 Hour Played");}
             if(totTime >= 18000){achievements.push("5 Hours Played");}
@@ -297,37 +319,29 @@ app.get('/userProfile2', (req, res) =>{
             db.any(qBestTime)
             .then( data=>{
               bestTime = data[0].time_taken;
+              vals.bestTime = bestTime;
               console.log('bestTime: %d', bestTime);
 
               db.any(qBestScore)
               .then( data=>{
                 bestScore = data[0].score;
 
-                if(bestScore >= 500){achievements.push("500 Best Score");}
-                if(bestScore >= 700){achievements.push( "700 Best Score");}
-                if(bestScore >= 900){achievements.push("900 Best Score");}
+                vals.bestScore = bestScore;
+
+                if(bestScore >= 100){achievements.push("100 Best Score");}
+                if(bestScore >= 1000){achievements.push( "1000 Best Score");}
+                if(bestScore >= 5000){achievements.push("5000 Best Score");}
 
                 db.any(qBestAccuracy)
                 .then( data=>{
                   bestAccuracy = data[0].num_correct;
+                  vals.bestAccuracy = bestAccuracy;
                   console.log("achievements: ", achievements);
-                  var vals = {
-                    quizzesTaken : quizzesTaken,
-                    pointsEarned :pointsEarned, 
-                    totTime : totTime, 
-                    bestTime : bestTime, 
-                    bestScore : bestScore, 
-                    bestAccuracy : bestAccuracy, 
-                    achievements,
-                    dateJoined : dateJoined,
-                    username: valUsername,
-                    email: email,
-                    message: msg,
-                    error: msgerr
-                  };
                   msg = '';
                   msgerr = false;
-                res.render('pages/profile', vals);
+                  vals.quizzesTaken = quizzesTaken;
+                  vals.achievements = achievements;
+                res.render('pages/profile', {vals: vals});
                 })
                 .catch(err => {
                   console.log(`${err}`);
@@ -353,14 +367,11 @@ app.get('/userProfile2', (req, res) =>{
         .catch(err => {
           console.log(`${err}`);
         });
-    }
+      }
     })
     .catch(err => {
       console.log(`${err}`);
     });  
-
-    
-  
 });
 
 app.post("/submitQuiz", async (req, res) => {
@@ -382,10 +393,11 @@ app.post("/submitQuiz", async (req, res) => {
         return 1;
     }
   }
-  const baseScore = (valNum_correct / 15) * 100;
-  const timeBonus = Math.max(100 - (valTime / 180) * 100, 0);
-  const difficultyBonus = difficultyStringToNumber(valDiff) * 10;
-  var valScore = Math.round(baseScore + timeBonus + difficultyBonus);
+  const baseScore = valNum_correct * 50;
+  const incorrectPenalty = (15 - valNum_correct) * 20;
+  const difficultyMultiplier = difficultyStringToNumber(valDiff) * 0.5;
+  const timeBonus = Math.max(180 - valTime, 0) * 0.1;
+  const valScore = Math.max(Math.round((baseScore + timeBonus + difficultyMultiplier - incorrectPenalty) * 10), 0);
   var gameVals = [valTime, valDiff, valCategory, valNum_correct, valScore];
 
   var insertGameQuery = `INSERT INTO games (time_taken, difficulty, category, num_correct, score) VALUES ($1, $2, $3, $4, $5) returning game_id;`;
@@ -421,9 +433,9 @@ app.post('/userProfile', function(req, res) {
   db.any(avatarQuery)
     .then(async data => {
       var user = req.session.user[0];
-      user.avatar_picture = avatar;
+      req.session.user[0].avatar_picture = avatar;
       console.log('Data received from the API:', data); // log the data to the console
-      res.redirect('/userProfile2');
+      res.redirect('/userProfile');
     })
     .catch(error => { // if an error occurred
       console.log(error);   // log the error to the console
