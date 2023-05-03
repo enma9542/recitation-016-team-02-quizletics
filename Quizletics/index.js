@@ -232,6 +232,7 @@ app.get('/userProfile', (req, res) =>{
   var email = req.session.user[0].email;
   var dateJoined = req.session.user[0].date_joined;
   var achievements = [];
+  var avatar_picture = req.session.user[0].avatar_picture;
 
 
   // Define a default vals object
@@ -248,7 +249,8 @@ app.get('/userProfile', (req, res) =>{
     user: user,
     email: email,
     message: msg,
-    error: msgerr
+    error: msgerr,
+    avatar_picture: avatar_picture
   };
 
   const qGetUserInfo = `SELECT * FROM users WHERE username = '${valUsername}';`;
@@ -422,19 +424,21 @@ app.post("/submitQuiz", async (req, res) => {
   });
 });
 
-app.post('/userProfile', function(req, res) {
+app.post('/update-pic', function(req, res) {
   const avatar = req.body.avatarOption;
   var valUser = req.session.user[0].username;
   console.log(req.body.avatarOption);
   console.log(req.session.user[0].username);
 
-  var avatarQuery = `UPDATE users SET avatar_picture = '${avatar}' WHERE username = '${valUser}';`
+  var avatarQuery = `UPDATE users SET avatar_picture = '${avatar}' WHERE username = '${valUser}' returning *;`
 
   db.any(avatarQuery)
     .then(async data => {
       var user = req.session.user[0];
       req.session.user[0].avatar_picture = avatar;
       console.log('Data received from the API:', data); // log the data to the console
+      req.session.user = data;
+      req.session.save();
       res.redirect('/userProfile');
     })
     .catch(error => { // if an error occurred
