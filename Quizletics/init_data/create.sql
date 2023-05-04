@@ -1,9 +1,8 @@
-DROP TABLE IF EXISTS games;
-
 CREATE TABLE if NOT EXISTS users(
     username VARCHAR(50) PRIMARY KEY,
     password CHAR(60) NOT NULL,
     email char(60) NOT NULL,
+    avatar_picture VARCHAR(255) NOT NULL,
     date_joined DATE
 );
 
@@ -20,3 +19,10 @@ CREATE TABLE IF NOT EXISTS games(
     difficulty SMALLINT,
     category VARCHAR(50)
 );
+
+CREATE TABLE IF NOT EXISTS leaderboard AS
+SELECT u.username, SUM(g.score) AS total_points
+FROM users u
+JOIN user_to_game utg ON u.username = utg.username
+JOIN games g ON utg.game_id = g.game_id
+GROUP BY u.username;
