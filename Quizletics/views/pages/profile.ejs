@@ -4,100 +4,87 @@
 
 <main>
   <!-- <img src="../../resources/icons-img/splash.svg" alt="" class="splash"> -->
-    <div class="profile-card">
-        <div class="card-header">
-            <h3>Achievements</h3>
-        </div>
-        <div class="player-awards">
+  <style>
 
-            <div class="container">
+    .award {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .award img {
+      width: 50px;
+      height: 50px;
+      margin-right: 1rem;
+    }
+    
+    .award-info {
+      flex: 1;
+    }    
+    .achievement-navigation {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
 
-                <div class="row">
-                    <div class="col-sm">
-                      <div class="awardbox">
-                        <%
-                          if(vals.achievements[0]){
-                            if(vals.achievements[0].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
-                            else if(vals.achievements[0].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
-                            else if(vals.achievements[0].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
-                            else if(vals.achievements[0].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
-                            %>
-                        
-                        <p> <%= vals.achievements[0] %></p>
-                        <%
-                          }
-                        %>
-                      </div>
-                    </div>
-                    <div class="col-sm">
-                      <div class="awardbox">
-                        <%
-                          if(vals.achievements[1]){
-                            if(vals.achievements[1].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
-                            else if(vals.achievements[1].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
-                            else if(vals.achievements[1].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
-                            else if(vals.achievements[1].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
-                            %>
-                        
-                        <p> <%= vals.achievements[1] %></p>
-                        <%
-                          }
-                        %>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-sm">
-                      <div class="awardbox">
-                        <%
-                          if(vals.achievements[2]){
-                            if(vals.achievements[2].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
-                            else if(vals.achievements[2].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
-                            else if(vals.achievements[2].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
-                            else if(vals.achievements[2].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
-                            %>
-                        
-                        <p> <%= vals.achievements[2] %></p>
-                        <%
-                          }
-                        %>
-                      </div>
-                    </div>
-                    <div class="col-sm">
-                      <div class="awardbox">
-                        <%
-                          if(vals.achievements[3]){
-                            if(vals.achievements[3].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
-                            else if(vals.achievements[3].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
-                            else if(vals.achievements[3].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
-                            else if(vals.achievements[3].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
-                            %>
-                        
-                        <p> <%= vals.achievements[3] %></p>
-                        <%
-                          }
-                        %>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-sm">
-                        <div class="nav-buttons">
-                            <button>
-                                <i class="bi-caret-left-fill"></i>
-                            </button>
-                            <button>
-                                <i class="bi-caret-right-fill"></i>
-                            </button>
-                        </div>
-                    </div>
-                  </div>
-
-              </div>
-            </div>
+    .prev-achievement, .next-achievement {
+      border: none;
+      background-color: white;
+      color: orangered;
+      font-size: 1.4rem;
+      padding-top: .25rem;
+      padding-bottom: .25rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      font-family: inherit;
+      line-height: 1.15;
+      margin: 0;
+      text-transform: none;
+      overflow: visible;
+      cursor: pointer;
+      border-radius: 5px; /* Add this line for rounded borders */
+    }
+  
+    .prev-achievement:hover, .next-achievement:hover {
+      background-color: peachpuff;
+    }
+    
+    .hidden {
+      display: none;
+    }
+  </style>
+  <div class="profile-card">
+    <div class="card-header">
+      <h3>Achievements</h3>
     </div>
+    <div class="player-awards">
+      <div class="achievement-container">
+        <% for (let i = 0; i < vals.achievements.length; i++) { %>
+        <div class="awardbox" data-index="<%= i %>">
+          <% let achievement = vals.achievements[i]; %>
+          <div class="award">
+            <% if (achievement.includes("Points")) { %>
+              <img src="/img/trophy.png" alt="Award Image" width="100">
+            <% } else if (achievement.includes("Quizzes Taken")) { %>
+              <img src="/img/quizzes-taken.png" alt="Award Image" width="100">
+            <% } else if (achievement.includes("Played")) { %>
+              <img src="/img/strongbrain.png" alt="Award Image" width="100">
+            <% } else if (achievement.includes("Score")) { %>
+              <img src="/img/goodscore.png" alt="Award Image" width="100">
+            <% } %>
+            <div class="award-info">
+              <h4><%= achievement %></h4>
+            </div>
+          </div>          
+        </div>
+        <% } %>
+      </div>
+      <div class="achievement-navigation">
+        <button id="prev-achievement" class="prev-achievement hidden">Previous</button>
+        <button id="next-achievement" class="next-achievement">Next</button>
+      </div>
+    </div>
+  </div>
     <div class="profile-card">
         <div class="user-info"> <!-- Profile Image + Name-->
             <button type="button" data-bs-toggle="modal" data-bs-target="#updatePhotoModal">
@@ -336,7 +323,43 @@
 </main>
 
 <script>
-
+  $(document).ready(function () {
+    let currentIndex = 0;
+    const maxIndex = $(".awardbox").length - 1;
+  
+    function updateAchievements() {
+      $(".awardbox").hide();
+      for (let i = currentIndex; i < currentIndex + 4 && i <= maxIndex; i++) {
+        $(`.awardbox[data-index="${i}"]`).show();
+      }
+      
+      // Show or hide navigation buttons
+      if (currentIndex === 0) {
+        $("#prev-achievement").addClass("hidden");
+      } else {
+        $("#prev-achievement").removeClass("hidden");
+      }
+      
+      if (currentIndex + 4 > maxIndex) {
+        $("#next-achievement").addClass("hidden");
+      } else {
+        $("#next-achievement").removeClass("hidden");
+      }
+    }
+  
+    $("#prev-achievement").click(function () {
+      currentIndex = Math.max(currentIndex - 4, 0);
+      updateAchievements();
+    });
+  
+    $("#next-achievement").click(function () {
+      currentIndex = Math.min(currentIndex + 4, maxIndex);
+      updateAchievements();
+    });
+  
+    updateAchievements(); // Call the function to initialize
+  });
+  
 function sendOption(option) {
   fetch('/update-pic', {
     method: 'POST',

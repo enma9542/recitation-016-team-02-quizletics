@@ -72,9 +72,6 @@ app.use(
 //API Routes Go Here
 //quiz page
 app.get('/quiz', (req, res) => {
-  if (!req.session.user) {
-    res.render("pages/login", { message: 'Must Be Logged In to Take Quiz', error: true });
-  }
   const category = req.query.category; // get the category from the query string
   const difficulty = req.query.difficulty; // get the difficulty from the query string
 
@@ -83,7 +80,7 @@ app.get('/quiz', (req, res) => {
       const data = response.data; // get the data from the response
       req.session.score = undefined; // reset the score
       console.log('Data received from the API:', data); // log the data to the console
-      res.render('pages/quiz', { data: data, score: req.session.score, req: req });  // render the quiz page and pass the data to it
+      res.render('pages/quiz', { data: data, score: req.session.score, user: req.session.user});  // render the quiz page and pass the data to it
     })
     .catch(error => { // if an error occurred
       console.log(error);   // log the error to the console
@@ -97,28 +94,28 @@ app.get('/quiz', (req, res) => {
 app.get('/', (req, res) => {
   db.any('SELECT username, total_points FROM leaderboard ORDER BY total_points DESC LIMIT 10')
     .then(rows => {
-      res.render('pages/home', { leaderboard: rows });
+      res.render('pages/home', { leaderboard: rows, user: req.session.user },);
     })
     .catch(error => {
       console.error(error);
-      res.render('pages/error');
+      res.render('pages/error', {user: req.session.user});
     });
 });
 
 // HOME /HOME
 app.get('/home', (req, res) => {
-  res.redirect('/')
+  res.redirect(302, '/')
 });
 
 // LEADERBOARD page. DEV purposes
 app.get('/leaderboard', (req, res) => {
   db.any('SELECT username, total_points FROM leaderboard ORDER BY total_points DESC LIMIT 100')
     .then(rows => {
-      res.render('pages/leaderboard', { leaderboard: rows });
+      res.render('pages/leaderboard', { leaderboard: rows, user: req.session.user});
     })
     .catch(error => {
       console.error(error);
-      res.render('pages/error');
+      res.render('pages/error', {user: req.session.user});
     });
 });
 
@@ -131,7 +128,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-    res.render('pages/login');
+    res.render('pages/login', { user: req.session.user});
 });
 
 app.post('/login', async (req, res) => {
@@ -150,7 +147,7 @@ app.post('/login', async (req, res) => {
             req.session.save();
             res.redirect('/userProfile');
         } else {
-          res.render('pages/login', {message: "Incorrect Password.", error: true});
+          res.render('pages/login', {message: "Incorrect Password.", error: true, user: req.session.user});
         }
       })
       .catch(err => {
@@ -163,7 +160,7 @@ app.post('/login', async (req, res) => {
 app.post('/register', async (req, res) => {
   //hash the password using bcrypt library
   if(req.body.password != req.body.password_confirm){
-    res.render('pages/register', {message: "Passwords do not match", error: true});
+    res.render('pages/register', {message: "Passwords do not match", error: true, user: req.session.user});
   }
   const hash = await bcrypt.hash(req.body.password, 10);
 
@@ -178,12 +175,12 @@ app.post('/register', async (req, res) => {
   db.any(searchQuery, [req.body.username])
   .then(data => {
     if(data && (data.length > 0)){
-      res.render('pages/register', {message: "Username Already Exists, Please Choose New Username.", error: true});
+      res.render('pages/register', {message: "Username Already Exists, Please Choose New Username.", error: true, user: req.session.user});
     }
     else{
       db.any(insertQuery, values)
       .then(data => {
-        res.render('pages/login', {message: "User Added Successfully", error: false});
+        res.render('pages/login', {message: "User Added Successfully", error: false, user: req.session.user});
       });
     }
   });
@@ -194,6 +191,7 @@ app.get('/register', (req, res) => {
   res.render("pages/register", {
     message: msg,
     error: msgerr,
+    user: req.session.user
   });
   msg = '';
   msgerr = false;
@@ -201,7 +199,7 @@ app.get('/register', (req, res) => {
 
 app.get("/logout", (req, res) => {
   req.session.destroy();
-  res.render("pages/login", {message: 'Logged Out Successfully.'});
+  res.render("pages/login", {message: 'Logged Out Successfully.', user: null});
 });
 
 
@@ -218,7 +216,7 @@ const auth = (req, res, next) => {
 app.get('/userProfile', (req, res) =>{
   res.setHeader('Cache-Control', 'no-cache');
   if(!req.session.user){
-    res.render("pages/login", {message: 'Must Be Logged In to View Profile Page', error: true});
+    res.render("pages/login", {message: 'Must Be Logged In to View Profile Page', error: true, user: req.session.user});
   }
 
   var user = req.session.user[0];
@@ -260,13 +258,18 @@ app.get('/userProfile', (req, res) =>{
   const qBestTime = `SELECT time_taken FROM games INNER JOIN user_to_game ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}' ORDER BY time_taken ASC LIMIT 1;`;
   const qBestScore = `SELECT score FROM games INNER JOIN user_to_game ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}' ORDER BY score DESC LIMIT 1;`;
   const qBestAccuracy = `SELECT num_correct FROM games INNER JOIN user_to_game ON user_to_game.game_id = games.game_id AND user_to_game.username = '${valUsername}' ORDER BY num_correct DESC LIMIT 1;`;
-
-    db.any(qQuizzesTaken)
+  const qFormattedDate = `SELECT TO_CHAR(date_joined, 'YYYY-MM-DD') AS formatted_date_joined FROM users WHERE username = '${valUsername}';`;
+  
+  db.any(qFormattedDate)
+  .then((data) => {
+    dateJoined = data[0].formatted_date_joined;
+    vals.dateJoined = dateJoined;
+    return db.any(qQuizzesTaken);
+  })
     .then( data=>{
-
       quizzesTaken = data[0].count;
 
-      if(quizzesTaken==='0'){
+      if(quizzesTaken ==='0'){
         if (quizzesTaken === '0') {
           vals.quizzesTaken = 0;
           vals.pointsEarned = 0;
@@ -287,7 +290,7 @@ app.get('/userProfile', (req, res) =>{
           console.log("dateJoined: ", vals.dateJoined);
           console.log("username: ", vals.username);
           console.log("vals: ", {vals: vals});
-          res.render('pages/profile', {vals: vals});
+          res.render('pages/profile', {vals: vals, user: req.session.user});
       }
     }
       else{
@@ -327,7 +330,6 @@ app.get('/userProfile', (req, res) =>{
               db.any(qBestScore)
               .then( data=>{
                 bestScore = data[0].score;
-
                 vals.bestScore = bestScore;
 
                 if(bestScore >= 100){achievements.push("100 Best Score");}
@@ -343,7 +345,7 @@ app.get('/userProfile', (req, res) =>{
                   msgerr = false;
                   vals.quizzesTaken = quizzesTaken;
                   vals.achievements = achievements;
-                res.render('pages/profile', {vals: vals});
+                res.render('pages/profile', {vals: vals, user: req.session.user});
                 })
                 .catch(err => {
                   console.log(`${err}`);
@@ -371,10 +373,7 @@ app.get('/userProfile', (req, res) =>{
         });
       }
     })
-    .catch(err => {
-      console.log(`${err}`);
-    });  
-});
+  });
 
 app.post("/submitQuiz", async (req, res) => {
   console.log("submitQuiz route called");
@@ -492,7 +491,7 @@ app.post("/updateProfile", async (req, res) => {
   else if(req.body.newPassword){
     //does confirmed password match?
     if(req.body.newPassword != req.body.newPasswordConfirm){
-      res.render('pages/profile', {message: "Passwords do not match", error: true});
+      res.render('pages/profile', {message: "Passwords do not match", error: true, user: req.session.user});
     }
     
     else{

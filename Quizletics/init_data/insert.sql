@@ -1,6 +1,5 @@
 --for testing purposes--
---mg/logo.svg', '2023-05-01T00:00:00.000Z');
- insert into users (username, password, email, avatar_picture, date_joined) values ('test','a','test@gmail.com', '../resources/icons-i
+ insert into users (username, password, email, avatar_picture, date_joined) values ('test','a','test@gmail.com', '../resources/icons-i--mg/logo.svg', '2023-05-01T00:00:00.000Z');
 -- insert into games (game_id, score, time_taken, num_correct, difficulty, category) values (5, 152, 20, 7, 1, 'sports');
 -- insert into games (game_id, score, time_taken, num_correct, difficulty, category) values (6, 300, 12, 9, 2, 'sports');
 -- insert into games (game_id, score, time_taken, num_correct, difficulty, category) values (7, 103, 29, 5, 0, 'sports');
