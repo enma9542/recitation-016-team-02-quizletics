@@ -382,6 +382,7 @@ app.post("/submitQuiz", async (req, res) => {
   var valTime = req.body.time_taken;
   var valDiff = req.body.difficulty;
   var valCategory = req.body.category;
+
   function difficultyStringToNumber(difficulty) {
     switch (difficulty) {
       case 'easy':
@@ -399,14 +400,15 @@ app.post("/submitQuiz", async (req, res) => {
   const difficultyMultiplier = difficultyStringToNumber(valDiff) * 0.5;
   const timeBonus = Math.max(180 - valTime, 0) * 0.1;
   const valScore = Math.max(Math.round((baseScore + timeBonus + difficultyMultiplier - incorrectPenalty) * 10), 0);
+
   var gameVals = [valTime, valDiff, valCategory, valNum_correct, valScore];
 
   var insertGameQuery = `INSERT INTO games (time_taken, difficulty, category, num_correct, score) VALUES ($1, $2, $3, $4, $5) returning game_id;`;
   var insertUTGQuery = `INSERT INTO user_to_game (username, game_id) VALUES ($1, $2);`;
 
   db.any(insertGameQuery, gameVals)
-  .then( data=>{
-      console.log('game_id: base:', data);
+  .then( data=>{   
+
       var utgVals = [valUsername, data[0].game_id];
       db.any(insertUTGQuery, utgVals)
       .then(() => {
