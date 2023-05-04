@@ -34,7 +34,7 @@ describe('Server!', () => {
         .post('/login')
         .send({username: 'Hello', password: 'World'})
         .end((err, res) => {
-          expect("Location", '/home')
+          expect("Location", '/userProfile')
           done();
         });
     });
@@ -43,7 +43,7 @@ describe('Server!', () => {
       chai
         .request(server)
         .post('/login')
-        .send({username: 'Hello', password: 'World'})
+        .send({username: 'NewUser4859473728', password: 'World'})
         .end((err, res) => {
           expect("Location", '/register');
           done();
@@ -51,3 +51,28 @@ describe('Server!', () => {
     });
   });
 });
+
+  describe('Register Test Cases', () => {
+    //We are checking POST /add_user API by passing the user info in the correct order. This test case should pass and return a status 200 along with a "Success" message.
+    //Positive cases
+    it('positive : /register', done => {
+      chai
+        .request(server)
+        .post('/register')
+        .send({username: 'NewUser0977336', email: 'test@test.com', password: 'World', password_confirm: 'World'})
+        .end((err, res) => {
+          expect("Location", '/login')
+          done();
+        });
+    });
+    it('Negative : /register. Checking invalid credentials', done => {
+      chai
+        .request(server)
+        .post('/register')
+        .send({username: 'NewUser3466758672', email: 'test@test.com', password: 'World', password_confirm: 'Space'})
+        .end((err, res) => {
+          expect("Location", '/register')
+          done();
+        });
+    });
+  });
