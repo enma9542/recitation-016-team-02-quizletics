@@ -4,104 +4,91 @@
 
 <main>
   <!-- <img src="../../resources/icons-img/splash.svg" alt="" class="splash"> -->
-    <div class="profile-card">
-        <div class="card-header">
-            <h3>Achievements</h3>
-        </div>
-        <div class="player-awards">
+  <style>
 
-            <div class="container">
+    .award {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .award img {
+      width: 50px;
+      height: 50px;
+      margin-right: 1rem;
+    }
+    
+    .award-info {
+      flex: 1;
+    }    
+    .achievement-navigation {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
 
-                <div class="row">
-                    <div class="col-sm">
-                      <div class="awardbox">
-                        <%
-                          if(achievements[0]){
-                            if(achievements[0].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
-                            else if(achievements[0].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
-                            else if(achievements[0].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
-                            else if(achievements[0].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
-                            %>
-                        
-                        <p> <%= achievements[0] %></p>
-                        <%
-                          }
-                        %>
-                      </div>
-                    </div>
-                    <div class="col-sm">
-                      <div class="awardbox">
-                        <%
-                          if(achievements[1]){
-                            if(achievements[1].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
-                            else if(achievements[1].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
-                            else if(achievements[1].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
-                            else if(achievements[1].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
-                            %>
-                        
-                        <p> <%= achievements[1] %></p>
-                        <%
-                          }
-                        %>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-sm">
-                      <div class="awardbox">
-                        <%
-                          if(achievements[2]){
-                            if(achievements[2].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
-                            else if(achievements[2].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
-                            else if(achievements[2].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
-                            else if(achievements[2].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
-                            %>
-                        
-                        <p> <%= achievements[2] %></p>
-                        <%
-                          }
-                        %>
-                      </div>
-                    </div>
-                    <div class="col-sm">
-                      <div class="awardbox">
-                        <%
-                          if(achievements[3]){
-                            if(achievements[3].includes("Points")){%><img src="/img/trophy.png" alt="Award Image"  width="100"> <%}
-                            else if(achievements[3].includes("Quizzes Taken")){%><img src="/img/quizzes-taken.png" alt="Award Image"  width="100"> <%}
-                            else if(achievements[3].includes("Played")){%><img src="/img/strongbrain.png" alt="Award Image"  width="100"> <%}
-                            else if(achievements[3].includes("Score")){%><img src="/img/goodscore.png" alt="Award Image"  width="100"> <%}
-                            %>
-                        
-                        <p> <%= achievements[3] %></p>
-                        <%
-                          }
-                        %>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-sm">
-                        <div class="nav-buttons">
-                            <button>
-                                <i class="bi-caret-left-fill"></i>
-                            </button>
-                            <button>
-                                <i class="bi-caret-right-fill"></i>
-                            </button>
-                        </div>
-                    </div>
-                  </div>
-
-              </div>
-            </div>
+    .prev-achievement, .next-achievement {
+      border: none;
+      background-color: white;
+      color: orangered;
+      font-size: 1.4rem;
+      padding-top: .25rem;
+      padding-bottom: .25rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      font-family: inherit;
+      line-height: 1.15;
+      margin: 0;
+      text-transform: none;
+      overflow: visible;
+      cursor: pointer;
+      border-radius: 5px; /* Add this line for rounded borders */
+    }
+  
+    .prev-achievement:hover, .next-achievement:hover {
+      background-color: peachpuff;
+    }
+    
+    .hidden {
+      display: none;
+    }
+  </style>
+  <div class="profile-card">
+    <div class="card-header">
+      <h3>Achievements</h3>
     </div>
+    <div class="player-awards">
+      <div class="achievement-container">
+        <% for (let i = 0; i < vals.achievements.length; i++) { %>
+        <div class="awardbox" data-index="<%= i %>">
+          <% let achievement = vals.achievements[i]; %>
+          <div class="award">
+            <% if (achievement.includes("Points")) { %>
+              <img src="/img/trophy.png" alt="Award Image" width="100">
+            <% } else if (achievement.includes("Quizzes Taken")) { %>
+              <img src="/img/quizzes-taken.png" alt="Award Image" width="100">
+            <% } else if (achievement.includes("Played")) { %>
+              <img src="/img/strongbrain.png" alt="Award Image" width="100">
+            <% } else if (achievement.includes("Score")) { %>
+              <img src="/img/goodscore.png" alt="Award Image" width="100">
+            <% } %>
+            <div class="award-info">
+              <h4><%= achievement %></h4>
+            </div>
+          </div>          
+        </div>
+        <% } %>
+      </div>
+      <div class="achievement-navigation">
+        <button id="prev-achievement" class="prev-achievement hidden">Previous</button>
+        <button id="next-achievement" class="next-achievement">Next</button>
+      </div>
+    </div>
+  </div>
     <div class="profile-card">
         <div class="user-info"> <!-- Profile Image + Name-->
             <button type="button" data-bs-toggle="modal" data-bs-target="#updatePhotoModal">
-                <img src="<%= user.avatar_picture %>" alt="Profile Image" data-toggle="tooltip" data-placement="top" title="Update Photo" >
+                <img src="<%= vals.avatar_picture %>" alt="Profile Image" data-toggle="tooltip" data-placement="top" title="Update Photo" >
             </button>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePhotoModal">
                 Update Photo
@@ -152,12 +139,12 @@
                 </div>
             </div>
 
-            <h3><%= username %></h3>
+            <h3><%= vals.username %></h3>
         </div>
         <div class="account-info">
             <h4>Account Information</h4> <!-- Date Joined?-->
-            <p>Date Joined: <%= dateJoined %></p>
-            <p>Associated Email: <%= email %></p>
+            <p>Date Joined: <%= vals.dateJoined %></p>
+            <p>Associated Email: <%= vals.email %></p>
         </div>
         <div class="account-settings">
             <h4>Account Settings</h4>
@@ -284,14 +271,14 @@
                     <div class="statbox">
                         <p>Quizzes Taken</p>
                         <hr>
-                        <h3><%= quizzesTaken %></h3>
+                        <h3><%= vals.quizzesTaken %></h3>
                     </div>
                   </div>
                   <div class="col-sm">
                     <div class="statbox">
                         <p>Points Earned</p>
                         <hr>
-                        <h3><%= pointsEarned %></h3>
+                        <h3><%= vals.pointsEarned %></h3>
                     </div>
                   </div>
                 </div>
@@ -301,14 +288,14 @@
                       <div class="statbox">
                           <p>Total Time Spent</p>
                           <hr>
-                          <h3><%= totTime %></h3>
+                          <h3><%= vals.totTime %></h3>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="statbox">
                           <p>Best Time</p>
                           <hr>
-                          <h3><%= bestTime %></h3>
+                          <h3><%= vals.bestTime %></h3>
                       </div>
                     </div>
                   </div>
@@ -318,14 +305,14 @@
                       <div class="statbox">
                           <p>Best Score</p>
                           <hr>
-                          <h3><%= bestScore %></h3>
+                          <h3><%= vals.bestScore %></h3>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="statbox">
                           <p>Highest Accuracy</p>
                           <hr>
-                          <h3><%= bestAccuracy %></h3>
+                          <h3><%= vals.bestAccuracy %></h3>
                       </div>
                     </div>
                   </div>
@@ -336,7 +323,43 @@
 </main>
 
 <script>
-
+  $(document).ready(function () {
+    let currentIndex = 0;
+    const maxIndex = $(".awardbox").length - 1;
+  
+    function updateAchievements() {
+      $(".awardbox").hide();
+      for (let i = currentIndex; i < currentIndex + 4 && i <= maxIndex; i++) {
+        $(`.awardbox[data-index="${i}"]`).show();
+      }
+      
+      // Show or hide navigation buttons
+      if (currentIndex === 0) {
+        $("#prev-achievement").addClass("hidden");
+      } else {
+        $("#prev-achievement").removeClass("hidden");
+      }
+      
+      if (currentIndex + 4 > maxIndex) {
+        $("#next-achievement").addClass("hidden");
+      } else {
+        $("#next-achievement").removeClass("hidden");
+      }
+    }
+  
+    $("#prev-achievement").click(function () {
+      currentIndex = Math.max(currentIndex - 4, 0);
+      updateAchievements();
+    });
+  
+    $("#next-achievement").click(function () {
+      currentIndex = Math.min(currentIndex + 4, maxIndex);
+      updateAchievements();
+    });
+  
+    updateAchievements(); // Call the function to initialize
+  });
+  
 function sendOption(option) {
   fetch('/update-pic', {
     method: 'POST',
