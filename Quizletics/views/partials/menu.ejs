@@ -5,83 +5,88 @@
             <h1>Quizletics</h1>
         </div>
         <ul class="nav-links">
-            <li ><a class="link-underline link-underline-opacity-0" href="/Home">Home</a></li>
-            <li class="quizzes"><a class="link-offset-2 link-underline link-underline-opacity-0" href="#">Quizzes</a>
-                <ul class="quiz-category">
-                    <li class="category"><a href="#">Sports</a>
-                        <ul>
-                            <li><a href="#" onclick="difficultySelected('Sport', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('Sport', 'medium')">Medium</a></li>
-                            <li><a href="#" onclick="difficultySelected('Sport', 'hard')">Hard</a></li>
-                        </ul>
-                    </li>
-                    <li class="category"><a href="#">Art</a>
-                        <ul class = "difficulty">
-                            <li><a href="#" onclick="difficultySelected('Arts', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('Arts', 'medium')">Medium</a></li>
-                            <li><a href="#" onclick="difficultySelected('Arts', 'hard')">Hard</a></li>
-                        </ul>
-                    </li>
-                    <li class="category"><a href="#">History</a>
-                        <ul class = "difficulty">
-                            <li><a href="#" onclick="difficultySelected('history', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('history', 'medium')">Medium</a></li>
-                            <li><a href="#" onclick="difficultySelected('history', 'hard')">Hard</a></li>
-                        </ul>
-                    </li>
-                    <li class="category"><a href="#">Culture</a>
-                        <ul class = "difficulty">
-                            <li><a href="#" onclick="difficultySelected('Society&Culture', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('Society&Culture', 'medium')">Medium</a></li>
-                            <li><a href="#" onclick="difficultySelected('Society&Culture', 'hard')">Hard</a></li>
-                        </ul>
-                    </li>
-                    <li class="category"><a href="#">Science</a>
-                        <ul class = "difficulty">
-                            <li><a href="#" onclick="difficultySelected('science', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('science', 'medium')">Medium</a></li>
-                            <li><a href="#" onclick="difficultySelected('science', 'hard')">Hard</a></li>
-                        </ul>
-                    </li>
-                    <li class="category"><a href="#">Geography</a>
-                        <ul class = "difficulty">
-                            <li><a href="#" onclick="difficultySelected('Geography', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('Geography', 'medium')">Medium</a></li>
-                            <li><a href="#" onclick="difficultySelected('Geography', 'hard')">Hard</a></li>
-                        </ul>
-                    </li>
-                    <li class="category"><a href="#">Food</a>
-                        <ul class = "difficulty">
-                            <li><a href="#" onclick="difficultySelected('Food&Drink', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('Food&Drink', 'medium')">Medium</a></li>
-                            <li><a href="#" onclick="difficultySelected('Food & Drink', 'hard')">Hard</a></li>
-                        </ul>
-                    </li>
-                    <li class="category"><a href="#">General</a>
-                        <ul class = "difficulty">
-                            <li><a href="#" onclick="difficultySelected('GeneralKnowledge', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('GeneralKnowledge', 'medium')">Medium</a></li>
-                            <li ><a href="#" onclick="difficultySelected('GeneralKnowledge', 'hard')">Hard</a></li>
-                        </ul>
-                    </li>
-                    <li class="category"><a href="#">Film</a>
-                        <ul class = "difficulty">
-                            <li><a href="#" onclick="difficultySelected('Film&TV', 'easy')">Easy</a></li>
-                            <li><a href="#" onclick="difficultySelected('Film&TV', 'medium')">Medium</a></li>
-                            <li ><a href="#" onclick="difficultySelected('Film&TV', 'hard')">Hard</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a class="link-underline link-underline-opacity-0" href="/login">Login</a>
-            </li>
-            <li>
-                <a class="link-underline link-underline-opacity-0" href="/userProfile">My Profile</a>
-            </li>
-            <li class="logout">
-                <a class="link-underline link-underline-opacity-0" href="/logout">Logout</a>
-            </li>
+            <% if (!user) { %>
+                <li ><a class="link-underline link-underline-opacity-0" href="/Home">Home</a></li>
+                <li>
+                    <a class="link-underline link-underline-opacity-0" href="/login">Login</a>
+                </li>
+            <% } else { %>
+                <li ><a class="link-underline link-underline-opacity-0" href="/Home">Home</a></li>
+                <li class="quizzes"><a class="link-offset-2 link-underline link-underline-opacity-0" href="#">Quizzes</a>
+                    <ul class="quiz-category">
+                        <li class="category"><a href="#">Sports</a>
+                            <ul>
+                                <li><a href="#" onclick="difficultySelected('Sport', 'easy')">Easy</a></li>
+                                <li><a href="#" onclick="difficultySelected('Sport', 'medium')">Medium</a></li>
+                                <li><a href="#" onclick="difficultySelected('Sport', 'hard')">Hard</a></li>
+                            </ul>
+                        </li>
+                        <li class="category"><a href="#">Art</a>
+                            <ul class = "difficulty">
+                                <li><a href="#" onclick="difficultySelected('Arts', 'easy')">Easy</a></li>
+                                <li><a href="#" onclick="difficultySelected('Arts', 'medium')">Medium</a></li>
+                                <li><a href="#" onclick="difficultySelected('Arts', 'hard')">Hard</a></li>
+                            </ul>
+                        </li>
+                        <li class="category"><a href="#">History</a>
+                            <ul class = "difficulty">
+                                <li><a href="#" onclick="difficultySelected('history', 'easy')">Easy</a></li>
+                                <li><a href="#" onclick="difficultySelected('history', 'medium')">Medium</a></li>
+                                <li><a href="#" onclick="difficultySelected('history', 'hard')">Hard</a></li>
+                            </ul>
+                        </li>
+                        <li class="category"><a href="#">Culture</a>
+                            <ul class = "difficulty">
+                                <li><a href="#" onclick="difficultySelected('Society&Culture', 'easy')">Easy</a></li>
+                                <li><a href="#" onclick="difficultySelected('Society&Culture', 'medium')">Medium</a></li>
+                                <li><a href="#" onclick="difficultySelected('Society&Culture', 'hard')">Hard</a></li>
+                            </ul>
+                        </li>
+                        <li class="category"><a href="#">Science</a>
+                            <ul class = "difficulty">
+                                <li><a href="#" onclick="difficultySelected('science', 'easy')">Easy</a></li>
+                                <li><a href="#" onclick="difficultySelected('science', 'medium')">Medium</a></li>
+                                <li><a href="#" onclick="difficultySelected('science', 'hard')">Hard</a></li>
+                            </ul>
+                        </li>
+                        <li class="category"><a href="#">Geography</a>
+                            <ul class = "difficulty">
+                                <li><a href="#" onclick="difficultySelected('Geography', 'easy')">Easy</a></li>
+                                <li><a href="#" onclick="difficultySelected('Geography', 'medium')">Medium</a></li>
+                                <li><a href="#" onclick="difficultySelected('Geography', 'hard')">Hard</a></li>
+                            </ul>
+                        </li>
+                        <li class="category"><a href="#">Food</a>
+                            <ul class = "difficulty">
+                                <li><a href="#" onclick="difficultySelected('Food&Drink', 'easy')">Easy</a></li>
+                                <li><a href="#" onclick="difficultySelected('Food&Drink', 'medium')">Medium</a></li>
+                                <li><a href="#" onclick="difficultySelected('Food & Drink', 'hard')">Hard</a></li>
+                            </ul>
+                        </li>
+                        <li class="category"><a href="#">General</a>
+                            <ul class = "difficulty">
+                                <li><a href="#" onclick="difficultySelected('GeneralKnowledge', 'easy')">Easy</a></li>
+                                <li><a href="#" onclick="difficultySelected('GeneralKnowledge', 'medium')">Medium</a></li>
+                                <li ><a href="#" onclick="difficultySelected('GeneralKnowledge', 'hard')">Hard</a></li>
+                            </ul>
+                        </li>
+                        <li class="category"><a href="#">Film</a>
+                            <ul class = "difficulty">
+                                <li><a href="#" onclick="difficultySelected('Film&TV', 'easy')">Easy</a></li>
+                                <li><a href="#" onclick="difficultySelected('Film&TV', 'medium')">Medium</a></li>
+                                <li ><a href="#" onclick="difficultySelected('Film&TV', 'hard')">Hard</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="link-underline link-underline-opacity-0" href="/userProfile">My Profile</a>
+                </li>
+                <li class="logout">
+                    <a class="link-underline link-underline-opacity-0" href="/logout">Logout</a>
+                </li>
+            <% } %>
+        </ul>
     
     </nav>
  </header>
