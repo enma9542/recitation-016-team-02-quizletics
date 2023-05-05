@@ -169,7 +169,7 @@ app.post('/register', async (req, res) => {
 
   // To-DO: Insert username and hashed password into 'users' table
   const searchQuery = "SELECT * FROM users where username = $1;";
-  const insertQuery = "INSERT INTO users (username, password, email, avatar_picture, date_joined) VALUES ($1, $2, $3, $4, $5) returning *;"
+  const insertQuery = "INSERT INTO users (username, password, email, avatar_picture, date_joined) VALUES ($1, $2, $3, $4, $5) returning *;" + "INSERT INTO leaderboard (username, total_points) VALUES ($1, 0);";
   const values = [req.body.username, hash, req.body.email, '/icons-img/logo.svg', currentDate];
 
   db.any(searchQuery, [req.body.username])
@@ -406,22 +406,24 @@ app.post("/submitQuiz", async (req, res) => {
   var insertGameQuery = `INSERT INTO games (time_taken, difficulty, category, num_correct, score) VALUES ($1, $2, $3, $4, $5) returning game_id;`;
   var insertUTGQuery = `INSERT INTO user_to_game (username, game_id) VALUES ($1, $2);`;
 
-  db.any(insertGameQuery, gameVals)
-  .then( data=>{   
+  var updateLeaderboardQuery = `UPDATE leaderboard SET total_points = total_points + $1 WHERE username = $2;`;
+  
 
-      var utgVals = [valUsername, data[0].game_id];
-      db.any(insertUTGQuery, utgVals)
-      .then(() => {
-        res.json({ status: 'success', message: 'Quiz results submitted successfully' });
-      })
-      .catch(err => {
-        console.log(`${err}`);
-        res.status(500).json({ status: 'error', message: 'Failed to submit quiz results' });
-      });
+  // NEW METHOD
+  // db.tx == transactions (multiple database queries will be executed as part of a single transaction)
+  // reason why: if any of these queries fail, the entire transaction will be rolled back, ensuring that the database remains consistent
+  db.tx(async t => {
+    const data = await t.one(insertGameQuery, gameVals);
+    const utgVals = [valUsername, data.game_id];
+    await t.none(insertUTGQuery, utgVals);
+    await t.none(updateLeaderboardQuery, [valScore, valUsername]);
   })
-  .catch(err => {
-      console.log(`${err}`);
-      res.status(500).json({ status: 'error', message: 'Failed to submit quiz results' });
+  .then(() => {
+    res.send("success");
+  })
+  .catch(error => {
+    console.log(error);
+    res.send("error");
   });
 });
 
